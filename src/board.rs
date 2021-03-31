@@ -26,7 +26,6 @@ pub struct Board(Vec<Vec<Cell>>);
 impl Board {
     pub fn new() -> Self {
         let mut board = vec![vec![Cell::Illegal; SIZE]; SIZE];
-        board[0][0] = Cell::Black;
         board[3][3] = Cell::White;
         board[4][4] = Cell::White;
         board[3][4] = Cell::Black;
@@ -43,7 +42,14 @@ impl Board {
             println!();
         }
     }
+}
 
+trait Logic {
+    fn validate_cells(board: &mut Vec<Vec<Cell>>);
+    fn validate(row: usize, col: usize, board: &mut Vec<Vec<Cell>>);
+}
+
+impl Logic for Board {
     fn validate_cells(board: &mut Vec<Vec<Cell>>) {
         for row in 0..SIZE {
             for col in 0..SIZE {
