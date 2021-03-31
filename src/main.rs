@@ -1,3 +1,8 @@
+mod board;
+mod game;
+
+use game::*;
+
 fn main() {
-    println!("Hello, world!");
+    start_game();
 }
