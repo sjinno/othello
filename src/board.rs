@@ -31,7 +31,7 @@ impl fmt::Display for Cell {
     }
 }
 
-pub struct Board(Vec<Vec<Cell>>);
+pub struct Board(pub Vec<Vec<Cell>>);
 
 impl Board {
     pub fn new() -> Self {
@@ -42,6 +42,7 @@ impl Board {
     }
 
     pub fn draw(&self) {
+        println!("\x1B[2J\x1B[1;1H");
         for row in self.0.iter() {
             for col in row {
                 print!("{}", col);
@@ -59,10 +60,11 @@ impl Board {
         //# Labeling:
         for (i, c) in ('1'..='8').enumerate() {
             board[0][i + 1] = Cell::Label(c);
-        }
-        for (i, c) in ('A'..='H').enumerate() {
             board[i + 1][0] = Cell::Label(c);
         }
+        // for (i, c) in ('A'..='H').enumerate() {
+        //     board[i + 1][0] = Cell::Label(c);
+        // }
         //# Labeling ends.
     }
 }
