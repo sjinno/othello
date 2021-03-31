@@ -1,13 +1,15 @@
 use std::fmt::{self, Write};
 
-const SIZE: usize = 8; // SIZE = HEIGHT = WIDTH
+const SIZE: usize = 9; // HEIGHT = WIDTH = 8, but +1 for labels.
 
 #[derive(Clone)]
 enum Cell {
-    Okay,
     Black,
     White,
+    Okay,
     Illegal,
+    Label(char),
+    Empty,
 }
 
 impl fmt::Display for Cell {
@@ -17,6 +19,8 @@ impl fmt::Display for Cell {
             Cell::White => f.write_str("○ "),
             Cell::Okay => f.write_char('・'),
             Cell::Illegal => f.write_str("x "),
+            Cell::Label(c) => write!(f, "{} ", *c),
+            Cell::Empty => f.write_str("  "),
         }
     }
 }
@@ -26,10 +30,7 @@ pub struct Board(Vec<Vec<Cell>>);
 impl Board {
     pub fn new() -> Self {
         let mut board = vec![vec![Cell::Illegal; SIZE]; SIZE];
-        board[3][3] = Cell::White;
-        board[4][4] = Cell::White;
-        board[3][4] = Cell::Black;
-        board[4][3] = Cell::Black;
+        Self::set_initial_state_and_label(&mut board);
         Self::validate_cells(&mut board);
         Board(board)
     }
@@ -41,6 +42,22 @@ impl Board {
             }
             println!();
         }
+    }
+
+    fn set_initial_state_and_label(board: &mut Vec<Vec<Cell>>) {
+        board[0][0] = Cell::Empty;
+        board[4][4] = Cell::White;
+        board[5][5] = Cell::White;
+        board[4][5] = Cell::Black;
+        board[5][4] = Cell::Black;
+        //# Labeling:
+        for (i, c) in ('1'..='8').enumerate() {
+            board[0][i + 1] = Cell::Label(c);
+        }
+        for (i, c) in ('A'..='H').enumerate() {
+            board[i + 1][0] = Cell::Label(c);
+        }
+        //# Labeling ends.
     }
 }
 
