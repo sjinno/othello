@@ -1,6 +1,7 @@
 use crate::board;
 
-enum Turn {
+#[derive(Clone)]
+pub enum Turn {
     Black,
     White,
     Neither,

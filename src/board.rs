@@ -1,15 +1,17 @@
 use std::fmt::{self, Write};
 
+use crate::game::Turn;
+
 const SIZE: usize = 9; // HEIGHT = WIDTH = 8, but +1 for labels.
 
 #[derive(Clone)]
-enum Cell {
+pub enum Cell {
     Black,
     White,
     Okay,
     Illegal,
     Label(char),
-    Empty,
+    Indicator(Turn),
 }
 
 impl fmt::Display for Cell {
@@ -20,7 +22,11 @@ impl fmt::Display for Cell {
             Cell::Okay => f.write_char('・'),
             Cell::Illegal => f.write_str("x "),
             Cell::Label(c) => write!(f, "{} ", *c),
-            Cell::Empty => f.write_str("  "),
+            Cell::Indicator(t) => match t {
+                Turn::Black => f.write_str("● "),
+                Turn::White => f.write_str("○ "),
+                Turn::Neither => f.write_str("  "),
+            },
         }
     }
 }
@@ -45,7 +51,7 @@ impl Board {
     }
 
     fn set_initial_state_and_label(board: &mut Vec<Vec<Cell>>) {
-        board[0][0] = Cell::Empty;
+        board[0][0] = Cell::Indicator(Turn::Black);
         board[4][4] = Cell::White;
         board[5][5] = Cell::White;
         board[4][5] = Cell::Black;
@@ -68,30 +74,30 @@ trait Logic {
 
 impl Logic for Board {
     fn validate_cells(board: &mut Vec<Vec<Cell>>) {
-        for row in 0..SIZE {
-            for col in 0..SIZE {
+        for row in 1..SIZE {
+            for col in 1..SIZE {
                 match board[row][col] {
                     Cell::Black | Cell::White => {
                         match (row, col) {
-                            (0, 0) => {
-                                Self::validate(0, 1, board); // R
-                                Self::validate(1, 0, board); // D
-                                Self::validate(1, 1, board); // DR
+                            (1, 1) => {
+                                Self::validate(1, 2, board); // R
+                                Self::validate(2, 1, board); // D
+                                Self::validate(2, 2, board); // DR
                             }
-                            (0, 7) => {
-                                Self::validate(0, 6, board); // L
-                                Self::validate(1, 7, board); // D
-                                Self::validate(1, 6, board); // DL
+                            (1, 8) => {
+                                Self::validate(1, 7, board); // L
+                                Self::validate(2, 8, board); // D
+                                Self::validate(2, 7, board); // DL
                             }
-                            (7, 0) => {
-                                Self::validate(7, 1, board); // R
-                                Self::validate(6, 0, board); // U
-                                Self::validate(6, 1, board); // UR
+                            (8, 1) => {
+                                Self::validate(8, 2, board); // R
+                                Self::validate(7, 1, board); // U
+                                Self::validate(7, 2, board); // UR
                             }
-                            (7, 7) => {
-                                Self::validate(7, 6, board); // L
-                                Self::validate(6, 7, board); // U
-                                Self::validate(6, 6, board); // UL
+                            (8, 8) => {
+                                Self::validate(8, 7, board); // L
+                                Self::validate(7, 8, board); // U
+                                Self::validate(7, 7, board); // UL
                             }
                             (0, 1..=6) => {
                                 Self::validate(row, col + 1, board); // L
