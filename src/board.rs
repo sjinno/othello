@@ -2,7 +2,7 @@ use std::fmt::{self, Write};
 
 use colored::Colorize;
 
-use crate::game::Turn;
+use crate::events::Turn;
 
 const SIZE: usize = 9; // HEIGHT = WIDTH = 8, but +1 for labels.
 
@@ -33,19 +33,21 @@ impl fmt::Display for Cell {
     }
 }
 
-pub struct Board(pub Vec<Vec<Cell>>);
+pub struct Board {
+    pub board: Vec<Vec<Cell>>,
+}
 
 impl Board {
     pub fn new() -> Self {
         let mut board = vec![vec![Cell::Illegal; SIZE]; SIZE];
         Self::set_initial_state_and_label(&mut board);
         Self::validate_cells(&mut board);
-        Board(board)
+        Self { board }
     }
 
     pub fn draw(&self) {
         println!("\x1B[2J\x1B[1;1H");
-        for row in self.0.iter() {
+        for row in self.board.iter() {
             for col in row {
                 print!("{}", col);
             }

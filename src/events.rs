@@ -1,7 +1,13 @@
 use std::io::{self, Write};
 
 use crate::board::{Board, Cell};
-use crate::game::Turn;
+
+#[derive(Clone)]
+pub enum Turn {
+    Black,
+    White,
+    Neither,
+}
 
 enum Move {
     Play(usize, usize),
@@ -12,13 +18,13 @@ pub fn handle_move(board: &mut Board, turn: Turn) -> Turn {
     match get_move() {
         Move::Play(r, c) => match turn {
             Turn::Black => {
-                board.0[r][c] = Cell::Black;
-                board.0[0][0] = Cell::Indicator(Turn::White);
+                board.board[r][c] = Cell::Black;
+                board.board[0][0] = Cell::Indicator(Turn::White);
                 Turn::White
             }
             Turn::White => {
-                board.0[r][c] = Cell::White;
-                board.0[0][0] = Cell::Indicator(Turn::Black);
+                board.board[r][c] = Cell::White;
+                board.board[0][0] = Cell::Indicator(Turn::Black);
                 Turn::Black
             }
             // Automatically set `turn` to `Neither`

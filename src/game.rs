@@ -1,38 +1,33 @@
 use crate::board::Board;
-use crate::events;
+use crate::events::{self, Turn};
 
-#[derive(Clone)]
-pub enum Turn {
-    Black,
-    White,
-    Neither,
-}
-
-enum GameMode {
+pub enum Game {
     On,
     Off,
 }
 
-pub fn game() {
-    let mut board = Board::new();
-    board.draw();
-    let mut mode = GameMode::On;
-    let mut turn = Turn::Black;
-    loop {
-        match mode {
-            GameMode::On => {
-                match turn {
-                    Turn::Black => {
-                        turn = events::handle_move(&mut board, turn);
+impl Game {
+    pub fn start() {
+        let mut board = Board::new();
+        board.draw();
+        let mut mode = Game::On;
+        let mut turn = Turn::Black;
+        loop {
+            match mode {
+                Game::On => {
+                    match turn {
+                        Turn::Black => {
+                            turn = events::handle_move(&mut board, turn);
+                        }
+                        Turn::White => {
+                            turn = events::handle_move(&mut board, turn);
+                        }
+                        Turn::Neither => mode = Game::Off,
                     }
-                    Turn::White => {
-                        turn = events::handle_move(&mut board, turn);
-                    }
-                    Turn::Neither => mode = GameMode::Off,
+                    board.draw();
                 }
-                board.draw();
+                Game::Off => break,
             }
-            GameMode::Off => break,
         }
     }
 }

@@ -2,8 +2,8 @@ mod board;
 mod events;
 mod game;
 
-use game::*;
+use game::Game;
 
 fn main() {
-    game();
+    Game::start();
 }
