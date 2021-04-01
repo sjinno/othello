@@ -1,5 +1,7 @@
 use std::fmt::{self, Write};
 
+use colored::Colorize;
+
 use crate::game::Turn;
 
 const SIZE: usize = 9; // HEIGHT = WIDTH = 8, but +1 for labels.
@@ -23,8 +25,8 @@ impl fmt::Display for Cell {
             Cell::Illegal => f.write_str("x "),
             Cell::Label(c) => write!(f, "{} ", *c),
             Cell::Indicator(t) => match t {
-                Turn::Black => f.write_str("● "),
-                Turn::White => f.write_str("○ "),
+                Turn::Black => write!(f, "{}", "● ".magenta()),
+                Turn::White => write!(f, "{}", "○ ".magenta()),
                 Turn::Neither => f.write_str("  "),
             },
         }

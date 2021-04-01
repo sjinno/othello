@@ -1,9 +1,10 @@
 [package]
-name = "othello"
-version = "0.1.0"
 authors = ["Shohei Jinno <shohei.jinno@gmail.com>"]
 edition = "2018"
+name = "othello"
+version = "0.1.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+colored = "2.0.0"
