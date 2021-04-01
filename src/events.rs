@@ -12,6 +12,7 @@ pub enum Turn {
 pub enum Move {
     Play(usize, usize),
     Pass,
+    Resign,
 }
 
 impl Move {
@@ -39,6 +40,7 @@ impl Move {
                 Turn::White => Turn::Black,
                 _ => Turn::Neither,
             },
+            Move::Resign => Turn::Neither,
         }
     }
 }
@@ -46,33 +48,44 @@ impl Move {
 trait Handler {
     // fn is_valid_move(board: &Board, turn: Turn) -> bool;
     fn get_move() -> Move;
-    // fn set_move(board: &mut Board, turn: Turn);
+    fn get_col_input() -> usize;
+    fn get_row_input() -> usize;
 }
 
 impl Handler for Move {
     fn get_move() -> Move {
+        let col = Self::get_col_input();
+        let row = Self::get_row_input();
+        Move::Play(row, col)
+    }
+
+    fn get_col_input() -> usize {
         print!("Which column? ");
         io::stdout().flush().unwrap();
+
         let mut col = String::new();
         io::stdin()
             .read_line(&mut col)
             .expect("failed to read line");
-        let col = col.trim().chars().next().unwrap();
 
+        match col.trim().parse() {
+            Ok(num) if (1..=8).contains(&num) => num,
+            _ => Self::get_col_input(),
+        }
+    }
+
+    fn get_row_input() -> usize {
         print!("Which row? ");
         io::stdout().flush().unwrap();
+
         let mut row = String::new();
         io::stdin()
             .read_line(&mut row)
             .expect("failed to read line");
-        let row = row.trim().chars().next().unwrap();
 
-        match (row, col) {
-            ('1'..='8', '1'..='8') => Move::Play(
-                row.to_digit(9).unwrap() as usize,
-                col.to_digit(9).unwrap() as usize,
-            ),
-            _ => Self::get_move(),
+        match row.trim().parse() {
+            Ok(num) if (1..=8).contains(&num) => num,
+            _ => Self::get_row_input(),
         }
     }
 }
