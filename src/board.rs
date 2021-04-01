@@ -6,7 +6,7 @@ use crate::events::Turn;
 
 const SIZE: usize = 9; // HEIGHT = WIDTH = 8, but +1 for labels.
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub enum Cell {
     Black,
     White,
@@ -98,28 +98,28 @@ impl Board {
                                 Self::validate(7, 8, board); // U
                                 Self::validate(7, 7, board); // UL
                             }
-                            (0, 1..=6) => {
+                            (1, 2..=7) => {
                                 Self::validate(row, col + 1, board); // L
                                 Self::validate(row, col - 1, board); // R
                                 Self::validate(row + 1, col, board); // D
                                 Self::validate(row + 1, col + 1, board); // DL
                                 Self::validate(row + 1, col - 1, board); // DR
                             }
-                            (7, 1..=6) => {
+                            (8, 2..=7) => {
                                 Self::validate(row, col + 1, board); // L
                                 Self::validate(row, col - 1, board); // R
                                 Self::validate(row - 1, col, board); // U
                                 Self::validate(row - 1, col + 1, board); // UL
                                 Self::validate(row - 1, col - 1, board); // UR
                             }
-                            (1..=6, 0) => {
+                            (2..=7, 1) => {
                                 Self::validate(row - 1, col, board); // U
                                 Self::validate(row + 1, col, board); // D
                                 Self::validate(row, col - 1, board); // R
                                 Self::validate(row - 1, col - 1, board); // UR
                                 Self::validate(row + 1, col - 1, board); // DR
                             }
-                            (1..=6, 7) => {
+                            (2..=7, 8) => {
                                 Self::validate(row - 1, col, board); // U
                                 Self::validate(row + 1, col, board); // D
                                 Self::validate(row, col + 1, board); // L
@@ -151,12 +151,3 @@ impl Board {
         }
     }
 }
-
-// trait Logic {
-//     fn validate_cells(board: &mut Vec<Vec<Cell>>);
-//     fn validate(row: usize, col: usize, board: &mut Vec<Vec<Cell>>);
-// }
-
-// impl Logic for Board {
-
-// }
