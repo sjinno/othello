@@ -71,15 +71,8 @@ impl Board {
         // }
         //# Labeling ends.
     }
-}
 
-trait Logic {
-    fn validate_cells(board: &mut Vec<Vec<Cell>>);
-    fn validate(row: usize, col: usize, board: &mut Vec<Vec<Cell>>);
-}
-
-impl Logic for Board {
-    fn validate_cells(board: &mut Vec<Vec<Cell>>) {
+    pub fn validate_cells(board: &mut Vec<Vec<Cell>>) {
         for row in 1..SIZE {
             for col in 1..SIZE {
                 match board[row][col] {
@@ -158,3 +151,12 @@ impl Logic for Board {
         }
     }
 }
+
+// trait Logic {
+//     fn validate_cells(board: &mut Vec<Vec<Cell>>);
+//     fn validate(row: usize, col: usize, board: &mut Vec<Vec<Cell>>);
+// }
+
+// impl Logic for Board {
+
+// }
