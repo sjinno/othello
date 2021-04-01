@@ -1,5 +1,5 @@
 use crate::board::Board;
-use crate::events::{self, Turn};
+use crate::events::{self, Move, Turn};
 
 pub enum Game {
     On,
@@ -17,10 +17,10 @@ impl Game {
                 Game::On => {
                     match turn {
                         Turn::Black => {
-                            turn = events::handle_move(&mut board, turn);
+                            turn = Move::handle_move(&mut board, turn);
                         }
                         Turn::White => {
-                            turn = events::handle_move(&mut board, turn);
+                            turn = Move::handle_move(&mut board, turn);
                         }
                         Turn::Neither => mode = Game::Off,
                     }
