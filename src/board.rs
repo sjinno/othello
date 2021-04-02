@@ -159,9 +159,8 @@ impl Board {
     }
 
     fn validate(row: usize, col: usize, board: &mut Vec<Vec<Cell>>) {
-        match board[row][col] {
-            Cell::Illegal => board[row][col] = Cell::Okay,
-            _ => {}
+        if board[row][col] == Cell::Illegal {
+            board[row][col] = Cell::Okay
         }
     }
 }

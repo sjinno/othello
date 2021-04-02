@@ -34,9 +34,8 @@ impl Game {
                     break;
                 }
             }
-            match mv {
-                Some(Move::Resign) => turn = Turn::Neither,
-                _ => {}
+            if let Some(Move::Resign) = mv {
+                turn = Turn::Neither
             }
         }
     }
