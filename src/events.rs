@@ -16,6 +16,17 @@ pub enum Move {
     Resign,
 }
 
+enum Direction {
+    Up,
+    Down,
+    Left,
+    Right,
+    UpLeft,
+    UpRight,
+    DownLeft,
+    DownRight,
+}
+
 impl Move {
     pub fn handle_move(board: &mut Board, turn: Turn) -> Turn {
         match Self::get_move(board, turn) {
@@ -135,50 +146,8 @@ impl Handler for Move {
         match (row, col) {
             (1..=2, _) => false,
             _ => match turn {
-                Turn::Black => {
-                    if board.board[row - 1][col] == Cell::White {
-                        println!("I'm here :)");
-                        let mut count = 2;
-                        while row - count != 0 {
-                            if board.board[row - count][col] == Cell::White {
-                                count += 1;
-                                continue;
-                            } else if board.board[row - count][col] == Cell::Black {
-                                (1..count).for_each(|r| {
-                                    board.board[row - r][col] = Cell::Black;
-                                });
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                        false
-                    } else {
-                        false
-                    }
-                }
-                Turn::White => {
-                    if board.board[row - 1][col] == Cell::Black {
-                        println!("I'm here :)");
-                        let mut count = 2;
-                        while row - count != 0 {
-                            if board.board[row - count][col] == Cell::Black {
-                                count += 1;
-                                continue;
-                            } else if board.board[row - count][col] == Cell::White {
-                                (1..count).for_each(|r| {
-                                    board.board[row - r][col] = Cell::White;
-                                });
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                        false
-                    } else {
-                        false
-                    }
-                }
+                Turn::Black => flip!(board, Cell::Black, Cell::White, Direction::Up, row, col),
+                Turn::White => flip!(board, Cell::White, Cell::Black, Direction::Up, row, col),
                 _ => true,
             },
         }
@@ -189,103 +158,19 @@ impl Handler for Move {
         match (row, col) {
             (7..=8, _) => false,
             _ => match turn {
-                Turn::Black => {
-                    if board.board[row + 1][col] == Cell::White {
-                        let mut count = 2;
-                        while row + count != 9 {
-                            if board.board[row + count][col] == Cell::White {
-                                count += 1;
-                                continue;
-                            } else if board.board[row + count][col] == Cell::Black {
-                                (1..count).for_each(|r| {
-                                    board.board[row + r][col] = Cell::Black;
-                                });
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                        false
-                    } else {
-                        false
-                    }
-                }
-                Turn::White => {
-                    if board.board[row + 1][col] == Cell::Black {
-                        println!("I'm here :)");
-                        let mut count = 2;
-                        while row + count != 9 {
-                            if board.board[row + count][col] == Cell::Black {
-                                count += 1;
-                                continue;
-                            } else if board.board[row + count][col] == Cell::White {
-                                (1..count).for_each(|r| {
-                                    board.board[row + r][col] = Cell::White;
-                                });
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                        false
-                    } else {
-                        false
-                    }
-                }
+                Turn::Black => flip!(board, Cell::Black, Cell::White, Direction::Down, row, col),
+                Turn::White => flip!(board, Cell::White, Cell::Black, Direction::Down, row, col),
                 _ => true,
             },
         }
     }
 
     fn try_flipping_left(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool {
-        println!("row = {}, col = {}", row, col);
         match (row, col) {
             (_, 1..=2) => false,
             _ => match turn {
-                Turn::Black => {
-                    if board.board[row][col - 1] == Cell::White {
-                        println!("I'm here :)");
-                        let mut count = 2;
-                        while col - count != 0 {
-                            if board.board[row][col - count] == Cell::White {
-                                count += 1;
-                                continue;
-                            } else if board.board[row][col - count] == Cell::Black {
-                                (1..count).for_each(|c| {
-                                    board.board[row][col - c] = Cell::Black;
-                                });
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                        false
-                    } else {
-                        false
-                    }
-                }
-                Turn::White => {
-                    if board.board[row][col - 1] == Cell::Black {
-                        println!("I'm here :)");
-                        let mut count = 2;
-                        while col - count != 0 {
-                            if board.board[row][col - count] == Cell::Black {
-                                count += 1;
-                                continue;
-                            } else if board.board[row][col - count] == Cell::White {
-                                (1..count).for_each(|c| {
-                                    board.board[row][col - c] = Cell::White;
-                                });
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                        false
-                    } else {
-                        false
-                    }
-                }
+                Turn::Black => flip!(board, Cell::Black, Cell::White, Direction::Left, row, col),
+                Turn::White => flip!(board, Cell::White, Cell::Black, Direction::Left, row, col),
                 _ => true,
             },
         }
@@ -296,49 +181,8 @@ impl Handler for Move {
         match (row, col) {
             (_, 7..=8) => false,
             _ => match turn {
-                Turn::Black => {
-                    if board.board[row][col + 1] == Cell::White {
-                        let mut count = 2;
-                        while col + count != 9 {
-                            if board.board[row][col + count] == Cell::White {
-                                count += 1;
-                                continue;
-                            } else if board.board[row][col + count] == Cell::Black {
-                                (1..count).for_each(|c| {
-                                    board.board[row][col + c] = Cell::Black;
-                                });
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                        false
-                    } else {
-                        false
-                    }
-                }
-                Turn::White => {
-                    if board.board[row][col + 1] == Cell::Black {
-                        println!("I'm here :)");
-                        let mut count = 2;
-                        while col + count != 9 {
-                            if board.board[row][col + count] == Cell::Black {
-                                count += 1;
-                                continue;
-                            } else if board.board[row][col + count] == Cell::White {
-                                (1..count).for_each(|c| {
-                                    board.board[row][col + c] = Cell::White;
-                                });
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                        false
-                    } else {
-                        false
-                    }
-                }
+                Turn::Black => flip!(board, Cell::Black, Cell::White, Direction::Right, row, col),
+                Turn::White => flip!(board, Cell::White, Cell::Black, Direction::Right, row, col),
                 _ => true,
             },
         }
@@ -348,49 +192,8 @@ impl Handler for Move {
         match (row, col) {
             (1..=2, 1..=2) => false,
             _ => match turn {
-                Turn::Black => {
-                    if board.board[row - 1][col - 1] == Cell::White {
-                        let mut count = 2;
-                        while row - count != 0 || col - count != 0 {
-                            if board.board[row - count][col - count] == Cell::White {
-                                count += 1;
-                                continue;
-                            } else if board.board[row - count][col - count] == Cell::Black {
-                                (1..count).for_each(|c| {
-                                    board.board[row - c][col - c] = Cell::Black;
-                                });
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                        false
-                    } else {
-                        false
-                    }
-                }
-                Turn::White => {
-                    if board.board[row - 1][col - 1] == Cell::Black {
-                        println!("I'm here :)");
-                        let mut count = 2;
-                        while row - count != 0 || col - count != 0 {
-                            if board.board[row - count][col - count] == Cell::Black {
-                                count += 1;
-                                continue;
-                            } else if board.board[row - count][col - count] == Cell::White {
-                                (1..count).for_each(|c| {
-                                    board.board[row - c][col - c] = Cell::White;
-                                });
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                        false
-                    } else {
-                        false
-                    }
-                }
+                Turn::Black => flip!(board, Cell::Black, Cell::White, Direction::UpLeft, row, col),
+                Turn::White => flip!(board, Cell::White, Cell::Black, Direction::UpLeft, row, col),
                 _ => true,
             },
         }
@@ -400,50 +203,22 @@ impl Handler for Move {
         match (row, col) {
             (1..=2, 7..=8) => false,
             _ => match turn {
-                Turn::Black => {
-                    if board.board[row - 1][col + 1] == Cell::White {
-                        println!("I'm here :)");
-                        let mut count = 2;
-                        while row - count != 0 || col + count != 9 {
-                            if board.board[row - count][col + count] == Cell::White {
-                                count += 1;
-                                continue;
-                            } else if board.board[row - count][col + count] == Cell::Black {
-                                (1..count).for_each(|c| {
-                                    board.board[row - c][col + c] = Cell::Black;
-                                });
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                        false
-                    } else {
-                        false
-                    }
-                }
-                Turn::White => {
-                    if board.board[row - 1][col + 1] == Cell::Black {
-                        println!("I'm here :)");
-                        let mut count = 2;
-                        while row - count != 0 || col + count != 9 {
-                            if board.board[row - count][col + count] == Cell::Black {
-                                count += 1;
-                                continue;
-                            } else if board.board[row - count][col + count] == Cell::White {
-                                (1..count).for_each(|c| {
-                                    board.board[row - c][col + c] = Cell::White;
-                                });
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                        false
-                    } else {
-                        false
-                    }
-                }
+                Turn::Black => flip!(
+                    board,
+                    Cell::Black,
+                    Cell::White,
+                    Direction::UpRight,
+                    row,
+                    col
+                ),
+                Turn::White => flip!(
+                    board,
+                    Cell::White,
+                    Cell::Black,
+                    Direction::UpRight,
+                    row,
+                    col
+                ),
                 _ => true,
             },
         }
@@ -453,49 +228,22 @@ impl Handler for Move {
         match (row, col) {
             (7..=8, 1..=2) => false,
             _ => match turn {
-                Turn::Black => {
-                    if board.board[row + 1][col - 1] == Cell::White {
-                        let mut count = 2;
-                        while row + count != 9 || col - count != 0 {
-                            if board.board[row + count][col - count] == Cell::White {
-                                count += 1;
-                                continue;
-                            } else if board.board[row + count][col - count] == Cell::Black {
-                                (1..count).for_each(|c| {
-                                    board.board[row + c][col - c] = Cell::Black;
-                                });
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                        false
-                    } else {
-                        false
-                    }
-                }
-                Turn::White => {
-                    if board.board[row + 1][col - 1] == Cell::Black {
-                        println!("I'm here :)");
-                        let mut count = 2;
-                        while row + count != 9 || col - count != 0 {
-                            if board.board[row + count][col - count] == Cell::Black {
-                                count += 1;
-                                continue;
-                            } else if board.board[row + count][col - count] == Cell::White {
-                                (1..count).for_each(|c| {
-                                    board.board[row + c][col - c] = Cell::White;
-                                });
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                        false
-                    } else {
-                        false
-                    }
-                }
+                Turn::Black => flip!(
+                    board,
+                    Cell::Black,
+                    Cell::White,
+                    Direction::DownLeft,
+                    row,
+                    col
+                ),
+                Turn::White => flip!(
+                    board,
+                    Cell::White,
+                    Cell::Black,
+                    Direction::DownLeft,
+                    row,
+                    col
+                ),
                 _ => true,
             },
         }
@@ -505,49 +253,22 @@ impl Handler for Move {
         match (row, col) {
             (7..=8, 7..=8) => false,
             _ => match turn {
-                Turn::Black => {
-                    if board.board[row + 1][col + 1] == Cell::White {
-                        let mut count = 2;
-                        while row + count != 9 || col + count != 9 {
-                            if board.board[row + count][col + count] == Cell::White {
-                                count += 1;
-                                continue;
-                            } else if board.board[row + count][col + count] == Cell::Black {
-                                (1..count).for_each(|c| {
-                                    board.board[row + c][col + c] = Cell::Black;
-                                });
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                        false
-                    } else {
-                        false
-                    }
-                }
-                Turn::White => {
-                    if board.board[row + 1][col + 1] == Cell::Black {
-                        println!("I'm here :)");
-                        let mut count = 2;
-                        while row + count != 9 || col + count != 9 {
-                            if board.board[row + count][col + count] == Cell::Black {
-                                count += 1;
-                                continue;
-                            } else if board.board[row + count][col + count] == Cell::White {
-                                (1..count).for_each(|c| {
-                                    board.board[row + c][col + c] = Cell::White;
-                                });
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                        false
-                    } else {
-                        false
-                    }
-                }
+                Turn::Black => flip!(
+                    board,
+                    Cell::Black,
+                    Cell::White,
+                    Direction::DownRight,
+                    row,
+                    col
+                ),
+                Turn::White => flip!(
+                    board,
+                    Cell::White,
+                    Cell::Black,
+                    Direction::DownRight,
+                    row,
+                    col
+                ),
                 _ => true,
             },
         }
