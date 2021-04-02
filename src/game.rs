@@ -26,7 +26,9 @@ impl Game {
                     }
                     board.draw();
                 }
-                Game::Off => break,
+                Game::Off => {
+                    break;
+                }
             }
         }
     }

@@ -50,8 +50,14 @@ impl Move {
                 _ => Turn::Neither,
             },
             Move::Pass => match turn {
-                Turn::Black => Turn::White,
-                Turn::White => Turn::Black,
+                Turn::Black => {
+                    board.board[0][0] = Cell::Indicator(Turn::White);
+                    Turn::White
+                }
+                Turn::White => {
+                    board.board[0][0] = Cell::Indicator(Turn::Black);
+                    Turn::Black
+                }
                 _ => Turn::Neither,
             },
             Move::Resign => {
@@ -70,6 +76,8 @@ trait Handler {
     fn get_move(board: &mut Board, turn: Turn) -> Move;
     fn get_col_input() -> usize;
     fn get_row_input() -> usize;
+    fn pass() -> usize;
+    fn resign() -> usize;
     fn is_valid_move(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool;
     fn flip_discs(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool;
     fn try_flipping_up(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool;
@@ -84,17 +92,22 @@ trait Handler {
 
 impl Handler for Move {
     fn get_move(board: &mut Board, turn: Turn) -> Move {
-        let col = Self::get_col_input();
-        let row = Self::get_row_input();
-        if Self::is_valid_move(board, turn, row, col) {
-            Move::Play(row, col)
-        } else {
-            Self::get_move(board, turn)
+        match Self::get_col_input() {
+            0 => Move::Pass,
+            9 => Move::Resign,
+            col => {
+                let row = Self::get_row_input();
+                if Self::is_valid_move(board, turn, row, col) {
+                    Move::Play(row, col)
+                } else {
+                    Self::get_move(board, turn)
+                }
+            }
         }
     }
 
     fn get_col_input() -> usize {
-        print!("Which column? ");
+        print!("Which column? (Enter `p` to pass or `r` to resign.) ");
         io::stdout().flush().unwrap();
 
         let mut col = String::new();
@@ -102,10 +115,25 @@ impl Handler for Move {
             .read_line(&mut col)
             .expect("failed to read line");
 
-        match col.trim().parse() {
-            Ok(num) if (1..=8).contains(&num) => num,
-            _ => Self::get_col_input(),
+        let col = col.trim();
+        println!("{}", col);
+
+        match col {
+            c if c == "p" => Self::pass(),
+            c if c == "r" => Self::resign(),
+            c => match c.parse() {
+                Ok(num) if (1..=8).contains(&num) => num,
+                _ => Self::get_col_input(),
+            },
         }
+    }
+
+    fn pass() -> usize {
+        0
+    }
+
+    fn resign() -> usize {
+        9
     }
 
     fn get_row_input() -> usize {
@@ -142,7 +170,6 @@ impl Handler for Move {
     }
 
     fn try_flipping_up(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool {
-        println!("row = {}, col = {}", row, col);
         match (row, col) {
             (1..=2, _) => false,
             _ => match turn {
@@ -154,7 +181,6 @@ impl Handler for Move {
     }
 
     fn try_flipping_down(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool {
-        println!("row = {}, col = {}", row, col);
         match (row, col) {
             (7..=8, _) => false,
             _ => match turn {
@@ -177,7 +203,6 @@ impl Handler for Move {
     }
 
     fn try_flipping_right(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool {
-        println!("row = {}, col = {}", row, col);
         match (row, col) {
             (_, 7..=8) => false,
             _ => match turn {
