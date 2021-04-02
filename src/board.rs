@@ -2,7 +2,8 @@ use std::fmt::{self, Write};
 
 use colored::Colorize;
 
-use crate::events::Turn;
+use crate::events::{Move, Turn};
+use crate::resign;
 
 const SIZE: usize = 9; // HEIGHT = WIDTH = 8, but +1 for labels.
 
@@ -45,8 +46,21 @@ impl Board {
         Self { board }
     }
 
-    pub fn draw(&self) {
-        println!("\x1B[2J\x1B[1;1H");
+    pub fn draw(&self, turn: Turn, mv: Option<Move>) {
+        print!("\x1B[2J\x1B[1;1H");
+        match mv {
+            Some(Move::Pass) => match turn {
+                Turn::Black => println!("White passed."),
+                Turn::White => println!("Black passed."),
+                _ => {}
+            },
+            Some(Move::Resign) => match turn {
+                Turn::Black => resign!(turn),
+                Turn::White => resign!(turn),
+                _ => {}
+            },
+            _ => {}
+        }
         for row in self.board.iter() {
             for col in row {
                 print!("{}", col);

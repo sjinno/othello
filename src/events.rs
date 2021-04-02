@@ -10,6 +10,7 @@ pub enum Turn {
     Neither,
 }
 
+#[derive(Copy, Clone)]
 pub enum Move {
     Play(usize, usize),
     Pass,
@@ -28,46 +29,43 @@ enum Direction {
 }
 
 impl Move {
-    pub fn handle_move(board: &mut Board, turn: Turn) -> Turn {
+    pub fn handle_move(board: &mut Board, turn: Turn) -> (Turn, Option<Move>) {
         match Self::get_move(board, turn) {
             Move::Play(r, c) => match turn {
                 Turn::Black => {
                     board.board[r][c] = Cell::Black;
                     board.board[0][0] = Cell::Indicator(Turn::White);
                     Board::validate_cells(&mut board.board);
-                    Turn::White
+                    (Turn::White, None)
                 }
                 Turn::White => {
                     board.board[r][c] = Cell::White;
                     board.board[0][0] = Cell::Indicator(Turn::Black);
                     Board::validate_cells(&mut board.board);
-                    Turn::Black
+                    (Turn::Black, None)
                 }
                 // Automatically set `turn` to `Neither`
                 // when there are no empty spaces.
                 //
                 // Or when each player passes their turn consecutively.
-                _ => Turn::Neither,
+                _ => (Turn::Neither, None),
             },
             Move::Pass => match turn {
                 Turn::Black => {
                     board.board[0][0] = Cell::Indicator(Turn::White);
-                    Turn::White
+                    (Turn::White, Some(Move::Pass))
                 }
                 Turn::White => {
                     board.board[0][0] = Cell::Indicator(Turn::Black);
-                    Turn::Black
+                    (Turn::Black, Some(Move::Pass))
                 }
-                _ => Turn::Neither,
+                _ => (Turn::Neither, None),
             },
-            Move::Resign => {
-                match turn {
-                    Turn::Black => println!("Black resigned."),
-                    Turn::White => println!("White resigned."),
-                    _ => {}
-                }
-                Turn::Neither
-            }
+            Move::Resign => match turn {
+                Turn::Black => (Turn::Black, Some(Move::Resign)),
+                Turn::White => (Turn::White, Some(Move::Resign)),
+                _ => (Turn::Neither, None),
+            },
         }
     }
 }

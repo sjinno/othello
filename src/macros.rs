@@ -176,3 +176,18 @@ macro_rules! flip {
         }
     }};
 }
+
+#[macro_export]
+macro_rules! resign {
+    ( $turn:expr ) => {{
+        match $turn {
+            Turn::Black => {
+                println!("Black has resigned.\nWhite wins.");
+            }
+            Turn::White => {
+                println!("White has resigned.\nBlack wins.");
+            }
+            _ => {}
+        }
+    }};
+}

@@ -9,26 +9,34 @@ pub enum Game {
 impl Game {
     pub fn start() {
         let mut board = Board::new();
-        board.draw();
         let mut mode = Game::On;
         let mut turn = Turn::Black;
+        let mut mv: Option<Move> = None;
+        board.draw(turn, mv);
         loop {
             match mode {
-                Game::On => {
-                    match turn {
-                        Turn::Black => {
-                            turn = Move::handle_move(&mut board, turn);
-                        }
-                        Turn::White => {
-                            turn = Move::handle_move(&mut board, turn);
-                        }
-                        Turn::Neither => mode = Game::Off,
+                Game::On => match turn {
+                    Turn::Black => {
+                        let res = Move::handle_move(&mut board, turn);
+                        turn = res.0;
+                        mv = res.1;
+                        board.draw(turn, mv);
                     }
-                    board.draw();
-                }
+                    Turn::White => {
+                        let res = Move::handle_move(&mut board, turn);
+                        turn = res.0;
+                        mv = res.1;
+                        board.draw(turn, mv);
+                    }
+                    Turn::Neither => mode = Game::Off,
+                },
                 Game::Off => {
                     break;
                 }
+            }
+            match mv {
+                Some(Move::Resign) => turn = Turn::Neither,
+                _ => {}
             }
         }
     }
