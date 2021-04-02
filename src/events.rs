@@ -1,6 +1,7 @@
 use std::io::{self, Write};
 
 use crate::board::{Board, Cell};
+use crate::flip;
 
 #[derive(Clone, Copy, PartialEq)]
 pub enum Turn {

@@ -1,6 +1,7 @@
 mod board;
 mod events;
 mod game;
+mod macros;
 
 use game::Game;
 
