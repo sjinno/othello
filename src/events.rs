@@ -42,7 +42,14 @@ impl Move {
                 Turn::White => Turn::Black,
                 _ => Turn::Neither,
             },
-            Move::Resign => Turn::Neither,
+            Move::Resign => {
+                match turn {
+                    Turn::Black => println!("Black resigned."),
+                    Turn::White => println!("White resigned."),
+                    _ => {}
+                }
+                Turn::Neither
+            }
         }
     }
 }
