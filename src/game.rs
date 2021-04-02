@@ -1,5 +1,5 @@
 use crate::board::Board;
-use crate::events::{self, Move, Turn};
+use crate::events::{Move, Turn};
 
 pub enum Game {
     On,

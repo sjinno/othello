@@ -25,8 +25,8 @@ impl fmt::Display for Cell {
             Cell::Illegal => f.write_str("x "),
             Cell::Label(c) => write!(f, "{} ", *c),
             Cell::Indicator(t) => match t {
-                Turn::Black => write!(f, "{}", "● ".magenta()),
-                Turn::White => write!(f, "{}", "○ ".magenta()),
+                Turn::Black => write!(f, "{}", "● ".green()),
+                Turn::White => write!(f, "{}", "○ ".green()),
                 Turn::Neither => f.write_str("  "),
             },
         }
