@@ -5,7 +5,7 @@ use colored::Colorize;
 use crate::events::{Move, Turn};
 use crate::resign;
 
-const SIZE: usize = 9; // HEIGHT = WIDTH = 8, but +1 for labels.
+pub const SIZE: usize = 9; // HEIGHT = WIDTH = 8, but +1 for labels.
 
 #[derive(Clone, PartialEq)]
 pub enum Cell {

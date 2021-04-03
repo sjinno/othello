@@ -1,7 +1,12 @@
 use std::io::{self, Write};
+use std::thread::sleep;
+use std::time::Duration;
+
+use strum::IntoEnumIterator;
+use strum_macros::EnumIter;
 
 use crate::board::{Board, Cell};
-use crate::flip;
+use crate::{check, flip};
 
 #[derive(Clone, Copy, PartialEq)]
 pub enum Turn {
@@ -17,6 +22,7 @@ pub enum Move {
     Resign,
 }
 
+#[derive(EnumIter)]
 enum Direction {
     Up,
     Down,
@@ -34,15 +40,27 @@ impl Move {
             Move::Play(r, c) => match turn {
                 Turn::Black => {
                     board.board[r][c] = Cell::Black;
-                    board.board[0][0] = Cell::Indicator(Turn::White);
                     Board::validate_cells(&mut board.board);
-                    (Turn::White, None)
+                    if Self::check_playablity(board, turn) {
+                        board.board[0][0] = Cell::Indicator(Turn::White);
+                        (Turn::White, None)
+                    } else {
+                        // println!("false");
+                        // sleep(Duration::new(3, 0));
+                        (Turn::Black, None)
+                    }
                 }
                 Turn::White => {
                     board.board[r][c] = Cell::White;
-                    board.board[0][0] = Cell::Indicator(Turn::Black);
                     Board::validate_cells(&mut board.board);
-                    (Turn::Black, None)
+                    if Self::check_playablity(board, turn) {
+                        board.board[0][0] = Cell::Indicator(Turn::Black);
+                        (Turn::Black, None)
+                    } else {
+                        // println!("false");
+                        // sleep(Duration::new(3, 0));
+                        (Turn::White, None)
+                    }
                 }
                 // Automatically set `turn` to `Neither`
                 // when there are no empty spaces.
@@ -52,12 +70,24 @@ impl Move {
             },
             Move::Pass => match turn {
                 Turn::Black => {
-                    board.board[0][0] = Cell::Indicator(Turn::White);
-                    (Turn::White, Some(Move::Pass))
+                    if Self::check_playablity(board, turn) {
+                        board.board[0][0] = Cell::Indicator(Turn::White);
+                        (Turn::White, Some(Move::Pass))
+                    } else {
+                        println!("Can't pass.");
+                        sleep(Duration::new(2, 0));
+                        (Turn::Black, Some(Move::Pass))
+                    }
                 }
                 Turn::White => {
-                    board.board[0][0] = Cell::Indicator(Turn::Black);
-                    (Turn::Black, Some(Move::Pass))
+                    if Self::check_playablity(board, turn) {
+                        board.board[0][0] = Cell::Indicator(Turn::Black);
+                        (Turn::Black, Some(Move::Pass))
+                    } else {
+                        println!("Can't pass.");
+                        sleep(Duration::new(2, 0));
+                        (Turn::White, Some(Move::Pass))
+                    }
                 }
                 _ => (Turn::Neither, None),
             },
@@ -70,7 +100,7 @@ impl Move {
     }
 }
 
-trait Handler {
+trait InputHandler {
     fn get_move(board: &mut Board, turn: Turn) -> Move;
     fn get_col_input() -> usize;
     fn get_row_input() -> usize;
@@ -88,7 +118,7 @@ trait Handler {
     fn try_flipping_down_right(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool;
 }
 
-impl Handler for Move {
+impl InputHandler for Move {
     fn get_move(board: &mut Board, turn: Turn) -> Move {
         match Self::get_col_input() {
             0 => Move::Pass,
@@ -114,8 +144,6 @@ impl Handler for Move {
             .expect("failed to read line");
 
         let col = col.trim();
-        println!("{}", col);
-
         match col {
             c if c == "p" => Self::pass(),
             c if c == "r" => Self::resign(),
@@ -294,6 +322,24 @@ impl Handler for Move {
                 ),
                 _ => true,
             },
+        }
+    }
+}
+
+trait PlayabilityChecker {
+    fn check_playablity(board: &Board, turn: Turn) -> bool;
+}
+
+impl PlayabilityChecker for Move {
+    fn check_playablity(board: &Board, turn: Turn) -> bool {
+        match turn {
+            Turn::Black => {
+                Direction::iter().any(|dir| check!(board, Cell::White, Cell::Black, dir))
+            }
+            Turn::White => {
+                Direction::iter().any(|dir| check!(board, Cell::Black, Cell::White, dir))
+            }
+            _ => false,
         }
     }
 }
