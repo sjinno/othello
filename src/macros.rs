@@ -90,7 +90,7 @@ macro_rules! flip {
             UpLeft => {
                 if $board.board[$row - 1][$col - 1] == $opponent {
                     let mut count = 2;
-                    while $row - count != 0 || $col - count != 0 {
+                    while $row - count != 0 && $col - count != 0 {
                         if $board.board[$row - count][$col - count] == $opponent {
                             count += 1;
                             continue;
@@ -111,7 +111,7 @@ macro_rules! flip {
             UpRight => {
                 if $board.board[$row - 1][$col + 1] == $opponent {
                     let mut count = 2;
-                    while $row - count != 0 || $col + count != 9 {
+                    while $row - count != 0 && $col + count != 9 {
                         if $board.board[$row - count][$col + count] == $opponent {
                             count += 1;
                             continue;
@@ -132,7 +132,7 @@ macro_rules! flip {
             DownLeft => {
                 if $board.board[$row + 1][$col - 1] == $opponent {
                     let mut count = 2;
-                    while $row + count != 9 || $col - count != 0 {
+                    while $row + count != 9 && $col - count != 0 {
                         if $board.board[$row + count][$col - count] == $opponent {
                             count += 1;
                             continue;
@@ -153,7 +153,7 @@ macro_rules! flip {
             DownRight => {
                 if $board.board[$row + 1][$col + 1] == $opponent {
                     let mut count = 2;
-                    while $row + count != 9 || $col + count != 9 {
+                    while $row + count != 9 && $col + count != 9 {
                         if $board.board[$row + count][$col + count] == $opponent {
                             count += 1;
                             continue;

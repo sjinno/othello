@@ -117,32 +117,32 @@ impl Board {
                                 Self::validate(7, 7, board); // UL
                             }
                             (1, 2..=7) => {
-                                Self::validate(row, col + 1, board); // L
-                                Self::validate(row, col - 1, board); // R
+                                Self::validate(row, col - 1, board); // L
+                                Self::validate(row, col + 1, board); // R
                                 Self::validate(row + 1, col, board); // D
-                                Self::validate(row + 1, col + 1, board); // DL
-                                Self::validate(row + 1, col - 1, board); // DR
+                                Self::validate(row + 1, col - 1, board); // DL
+                                Self::validate(row + 1, col + 1, board); // DR
                             }
                             (8, 2..=7) => {
-                                Self::validate(row, col + 1, board); // L
-                                Self::validate(row, col - 1, board); // R
+                                Self::validate(row, col - 1, board); // L
+                                Self::validate(row, col + 1, board); // R
                                 Self::validate(row - 1, col, board); // U
-                                Self::validate(row - 1, col + 1, board); // UL
-                                Self::validate(row - 1, col - 1, board); // UR
+                                Self::validate(row - 1, col - 1, board); // UL
+                                Self::validate(row - 1, col + 1, board); // UR
                             }
                             (2..=7, 1) => {
                                 Self::validate(row - 1, col, board); // U
                                 Self::validate(row + 1, col, board); // D
-                                Self::validate(row, col - 1, board); // R
-                                Self::validate(row - 1, col - 1, board); // UR
-                                Self::validate(row + 1, col - 1, board); // DR
+                                Self::validate(row, col + 1, board); // R
+                                Self::validate(row - 1, col + 1, board); // UR
+                                Self::validate(row + 1, col + 1, board); // DR
                             }
                             (2..=7, 8) => {
                                 Self::validate(row - 1, col, board); // U
                                 Self::validate(row + 1, col, board); // D
-                                Self::validate(row, col + 1, board); // L
-                                Self::validate(row - 1, col + 1, board); // UL
-                                Self::validate(row + 1, col + 1, board); // DL
+                                Self::validate(row, col - 1, board); // L
+                                Self::validate(row - 1, col - 1, board); // UL
+                                Self::validate(row + 1, col - 1, board); // DL
                             }
                             _ => {
                                 Self::validate(row - 1, col - 1, board); // UL
