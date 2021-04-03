@@ -1,4 +1,4 @@
-use std::fmt::{self, Write};
+use std::fmt;
 
 use colored::Colorize;
 
@@ -20,10 +20,10 @@ pub enum Cell {
 impl fmt::Display for Cell {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Cell::Black => f.write_str("● "),
-            Cell::White => f.write_str("○ "),
-            Cell::Okay => f.write_char('・'),
-            Cell::Illegal => f.write_str("x "),
+            Cell::Black => write!(f, "{}", "● ".black().on_green()),
+            Cell::White => write!(f, "{}", "○ ".black().on_green()),
+            Cell::Okay => write!(f, "{}", "・".on_green()),
+            Cell::Illegal => write!(f, "{}", "・".on_green()),
             Cell::Label(c) => write!(f, "{} ", *c),
             Cell::Indicator(t) => match t {
                 Turn::Black => write!(f, "{}", "● ".green()),

@@ -47,7 +47,6 @@ macro_rules! flip {
             }
             Left => {
                 if $board.board[$row][$col - 1] == $opponent {
-                    println!("I'm here :)");
                     let mut count = 2;
                     while $col - count != 0 {
                         if $board.board[$row][$col - count] == $opponent {
@@ -111,7 +110,6 @@ macro_rules! flip {
             }
             UpRight => {
                 if $board.board[$row - 1][$col + 1] == $opponent {
-                    println!("I'm here :)");
                     let mut count = 2;
                     while $row - count != 0 || $col + count != 9 {
                         if $board.board[$row - count][$col + count] == $opponent {
