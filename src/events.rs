@@ -45,8 +45,6 @@ impl Move {
                         board.board[0][0] = Cell::Indicator(Turn::White);
                         (Turn::White, None)
                     } else {
-                        // println!("false");
-                        // sleep(Duration::new(3, 0));
                         (Turn::Black, None)
                     }
                 }
@@ -57,8 +55,6 @@ impl Move {
                         board.board[0][0] = Cell::Indicator(Turn::Black);
                         (Turn::Black, None)
                     } else {
-                        // println!("false");
-                        // sleep(Duration::new(3, 0));
                         (Turn::White, None)
                     }
                 }
@@ -75,7 +71,7 @@ impl Move {
                         (Turn::White, Some(Move::Pass))
                     } else {
                         println!("Can't pass.");
-                        sleep(Duration::new(2, 0));
+                        sleep(Duration::new(1, 0));
                         (Turn::Black, Some(Move::Pass))
                     }
                 }
@@ -85,7 +81,7 @@ impl Move {
                         (Turn::Black, Some(Move::Pass))
                     } else {
                         println!("Can't pass.");
-                        sleep(Duration::new(2, 0));
+                        sleep(Duration::new(1, 0));
                         (Turn::White, Some(Move::Pass))
                     }
                 }
@@ -333,12 +329,8 @@ trait PlayabilityChecker {
 impl PlayabilityChecker for Move {
     fn check_playablity(board: &Board, turn: Turn) -> bool {
         match turn {
-            Turn::Black => {
-                Direction::iter().any(|dir| check!(board, Cell::White, Cell::Black, dir))
-            }
-            Turn::White => {
-                Direction::iter().any(|dir| check!(board, Cell::Black, Cell::White, dir))
-            }
+            Turn::Black => Direction::iter().any(|d| check!(board, Cell::White, Cell::Black, d)),
+            Turn::White => Direction::iter().any(|d| check!(board, Cell::Black, Cell::White, d)),
             _ => false,
         }
     }
