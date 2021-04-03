@@ -6,7 +6,7 @@ use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
 use crate::board::{Board, Cell};
-use crate::{check, flip};
+use crate::{check, flip, option};
 
 #[derive(Clone, Copy, PartialEq)]
 pub enum Turn {
@@ -20,6 +20,7 @@ pub enum Move {
     Play(usize, usize),
     Pass,
     Resign,
+    Undo,
     Dominate,
 }
 
@@ -103,6 +104,7 @@ impl Move {
                 Turn::White => (Turn::White, Some(Move::Resign)),
                 _ => (Turn::Neither, None),
             },
+            Move::Undo => Self::handle_move(board, turn),
             _ => (Turn::Neither, None),
         }
     }
@@ -112,8 +114,6 @@ trait InputHandler {
     fn get_move(board: &mut Board, turn: Turn) -> Move;
     fn get_col_input() -> usize;
     fn get_row_input() -> usize;
-    fn pass() -> usize;
-    fn resign() -> usize;
     fn is_valid_move(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool;
     fn flip_discs(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool;
     fn try_flipping_up(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool;
@@ -131,14 +131,16 @@ impl InputHandler for Move {
         match Self::get_col_input() {
             0 => Move::Pass,
             9 => Move::Resign,
-            col => {
-                let row = Self::get_row_input();
-                if Self::is_valid_move(board, turn, row, col) {
-                    Move::Play(row, col)
-                } else {
-                    Self::get_move(board, turn)
+            col => match Self::get_row_input() {
+                42 => Move::Undo,
+                row => {
+                    if Self::is_valid_move(board, turn, row, col) {
+                        Move::Play(row, col)
+                    } else {
+                        Self::get_move(board, turn)
+                    }
                 }
-            }
+            },
         }
     }
 
@@ -153,8 +155,8 @@ impl InputHandler for Move {
 
         let col = col.trim();
         match col {
-            c if c.eq_ignore_ascii_case("p") => Self::pass(),
-            c if c.eq_ignore_ascii_case("r") => Self::resign(),
+            c if c.eq_ignore_ascii_case("p") => option!(pass),
+            c if c.eq_ignore_ascii_case("r") => option!(resign),
             c => match c.parse() {
                 Ok(num) if (1..=8).contains(&num) => num,
                 _ => Self::get_col_input(),
@@ -162,16 +164,8 @@ impl InputHandler for Move {
         }
     }
 
-    fn pass() -> usize {
-        0
-    }
-
-    fn resign() -> usize {
-        9
-    }
-
     fn get_row_input() -> usize {
-        print!("Which row? ");
+        print!("Which row? (Enter `u` to undo the column input.)");
         io::stdout().flush().unwrap();
 
         let mut row = String::new();
@@ -179,9 +173,13 @@ impl InputHandler for Move {
             .read_line(&mut row)
             .expect("failed to read line");
 
-        match row.trim().parse() {
-            Ok(num) if (1..=8).contains(&num) => num,
-            _ => Self::get_row_input(),
+        let row = row.trim();
+        match row {
+            r if r.eq_ignore_ascii_case("u") => option!(undo),
+            r => match r.parse() {
+                Ok(num) if (1..=8).contains(&num) => num,
+                _ => Self::get_row_input(),
+            },
         }
     }
 

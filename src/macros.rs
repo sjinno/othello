@@ -372,3 +372,18 @@ macro_rules! check {
         true
     }};
 }
+
+#[macro_export]
+macro_rules! option {
+    (pass) => {{
+        0
+    }};
+
+    (resign) => {{
+        9
+    }};
+
+    (undo) => {{
+        42
+    }};
+}
