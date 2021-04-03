@@ -8,3 +8,4 @@
 - [x] Show score at the end of game.
 - [x] Message when player passes, resigns, or wins.
 - [x] Automatically exit game when one has nowhere to play and print message.
+- [ ] Probably handle input better... :)
