@@ -141,8 +141,8 @@ impl InputHandler for Move {
 
         let col = col.trim();
         match col {
-            c if c == "p" => Self::pass(),
-            c if c == "r" => Self::resign(),
+            c if c.eq_ignore_ascii_case("p") => Self::pass(),
+            c if c.eq_ignore_ascii_case("r") => Self::resign(),
             c => match c.parse() {
                 Ok(num) if (1..=8).contains(&num) => num,
                 _ => Self::get_col_input(),
