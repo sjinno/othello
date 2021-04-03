@@ -1,6 +1,4 @@
-# othello
-
-Othello
+# Othello
 
 ## Todo:
 
