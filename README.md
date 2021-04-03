@@ -1,5 +1,7 @@
 # Othello
 
+![Build](https://github.com/sjinno/othello/workflows/Build/badge.svg)
+
 ## Todo:
 
 - [x] Get input and process it with proper error handling.
