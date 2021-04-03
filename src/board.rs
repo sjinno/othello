@@ -79,11 +79,12 @@ impl Board {
     }
 
     fn set_initial_state_and_label(board: &mut Vec<Vec<Cell>>) {
-        board[0][0] = Cell::Indicator(Turn::Black);
-        board[4][4] = Cell::White;
-        board[5][5] = Cell::White;
-        board[4][5] = Cell::Black;
-        board[5][4] = Cell::Black;
+        board[0][0] = Cell::Indicator(Turn::Black); // Indicator located at top left corner.
+        board[4][4] = Cell::White; // Initial position of White.
+        board[5][5] = Cell::White; // Initial position of White.
+        board[4][5] = Cell::Black; // Initial position of Black
+        board[5][4] = Cell::Black; // Initial position of Black
+
         //# Labeling:
         for (i, c) in ('1'..='8').enumerate() {
             board[0][i + 1] = Cell::Label(c);
@@ -95,12 +96,14 @@ impl Board {
         //# Labeling ends.
     }
 
+    // This function validates whether or not empty cells are playable.
     pub fn validate_cells(board: &mut Vec<Vec<Cell>>) {
         for row in 1..SIZE {
             for col in 1..SIZE {
                 match board[row][col] {
                     Cell::Black | Cell::White => {
                         match (row, col) {
+                            //# Corner edge cases:
                             (1, 1) => {
                                 Self::validate(1, 2, board); // R
                                 Self::validate(2, 1, board); // D
@@ -121,6 +124,7 @@ impl Board {
                                 Self::validate(7, 8, board); // U
                                 Self::validate(7, 7, board); // UL
                             }
+                            //# Corner edge cases end.
                             (1, 2..=7) => {
                                 Self::validate(row, col - 1, board); // L
                                 Self::validate(row, col + 1, board); // R

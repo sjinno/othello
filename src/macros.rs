@@ -1,3 +1,5 @@
+// This `flip` macro just flips discs when a disc is placed
+// at a valid cell.
 #[macro_export]
 macro_rules! flip {
     ( $board:expr, $you:expr, $opponent:expr, $dir:expr, $row:expr, $col:expr ) => {{
@@ -175,6 +177,10 @@ macro_rules! flip {
     }};
 }
 
+// This macro handles several cases where:
+//   1. If cells are available for whichever player to play.
+//   2. If the board is completely dominated by one player.
+//   3. Calculate scores when a game ends.
 #[macro_export]
 macro_rules! check {
     ( $board:expr, $you:expr, $opponent:expr, $dir:expr ) => {{

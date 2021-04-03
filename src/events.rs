@@ -50,10 +50,16 @@ impl Move {
                         return (res.1, Some(Move::Win(res.2)));
                     }
 
+                    // Automatic win happens when one player dominates
+                    // the entire board.
                     if Self::check_automatic_win(board, Cell::White) {
                         return (Turn::Black, Some(Move::Dominate));
                     }
 
+                    // Checks if the other player has available cells
+                    // that they can play.
+                    //
+                    // If not, you will be automatically given a turn again.
                     if Self::check_playablity(board, turn) {
                         board.board[0][0] = Cell::Indicator(Turn::White);
                         (Turn::White, None)
