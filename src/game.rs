@@ -34,7 +34,7 @@ impl Game {
                     break;
                 }
             }
-            if let Some(Move::Resign) = mv {
+            if let Some(Move::Resign) | Some(Move::Dominate) = mv {
                 turn = Turn::Neither
             }
         }

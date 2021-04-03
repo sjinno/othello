@@ -20,6 +20,7 @@ pub enum Move {
     Play(usize, usize),
     Pass,
     Resign,
+    Dominate,
 }
 
 #[derive(EnumIter)]
@@ -41,21 +42,31 @@ impl Move {
                 Turn::Black => {
                     board.board[r][c] = Cell::Black;
                     Board::validate_cells(&mut board.board);
-                    if Self::check_playablity(board, turn) {
-                        board.board[0][0] = Cell::Indicator(Turn::White);
-                        (Turn::White, None)
+
+                    if Self::check_automatic_win(board, Cell::White) {
+                        (Turn::Black, Some(Move::Dominate))
                     } else {
-                        (Turn::Black, None)
+                        if Self::check_playablity(board, turn) {
+                            board.board[0][0] = Cell::Indicator(Turn::White);
+                            (Turn::White, None)
+                        } else {
+                            (Turn::Black, None)
+                        }
                     }
                 }
                 Turn::White => {
                     board.board[r][c] = Cell::White;
                     Board::validate_cells(&mut board.board);
-                    if Self::check_playablity(board, turn) {
-                        board.board[0][0] = Cell::Indicator(Turn::Black);
-                        (Turn::Black, None)
+
+                    if Self::check_automatic_win(board, Cell::Black) {
+                        (Turn::White, Some(Move::Dominate))
                     } else {
-                        (Turn::White, None)
+                        if Self::check_playablity(board, turn) {
+                            board.board[0][0] = Cell::Indicator(Turn::Black);
+                            (Turn::Black, None)
+                        } else {
+                            (Turn::White, None)
+                        }
                     }
                 }
                 // Automatically set `turn` to `Neither`
@@ -92,6 +103,7 @@ impl Move {
                 Turn::White => (Turn::White, Some(Move::Resign)),
                 _ => (Turn::Neither, None),
             },
+            _ => (Turn::Neither, None),
         }
     }
 }
@@ -324,6 +336,7 @@ impl InputHandler for Move {
 
 trait PlayabilityChecker {
     fn check_playablity(board: &Board, turn: Turn) -> bool;
+    fn check_automatic_win(board: &Board, opponent_color: Cell) -> bool;
 }
 
 impl PlayabilityChecker for Move {
@@ -333,5 +346,9 @@ impl PlayabilityChecker for Move {
             Turn::White => Direction::iter().any(|d| check!(board, Cell::Black, Cell::White, d)),
             _ => false,
         }
+    }
+
+    fn check_automatic_win(board: &Board, opponent_color: Cell) -> bool {
+        check!(board, opponent_color)
     }
 }

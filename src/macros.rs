@@ -359,19 +359,16 @@ macro_rules! check {
             }
         }
     }};
-}
 
-#[macro_export]
-macro_rules! resign {
-    ( $turn:expr ) => {{
-        match $turn {
-            Turn::Black => {
-                println!("Black has resigned.\nWhite wins.");
+    ( $board:expr, $opponent_color:expr ) => {{
+        use crate::board::SIZE;
+        for row in 1..SIZE {
+            for col in 1..SIZE {
+                if $board.board[row][col] == $opponent_color {
+                    return false;
+                }
             }
-            Turn::White => {
-                println!("White has resigned.\nBlack wins.");
-            }
-            _ => {}
         }
+        true
     }};
 }

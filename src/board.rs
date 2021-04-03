@@ -3,7 +3,6 @@ use std::fmt;
 use colored::Colorize;
 
 use crate::events::{Move, Turn};
-use crate::resign;
 
 pub const SIZE: usize = 9; // HEIGHT = WIDTH = 8, but +1 for labels.
 
@@ -55,8 +54,13 @@ impl Board {
                 _ => {}
             },
             Some(Move::Resign) => match turn {
-                Turn::Black => resign!(turn),
-                Turn::White => resign!(turn),
+                Turn::Black => println!("Black has resigned.\nWhite wins."),
+                Turn::White => println!("White has resigned.\nBlack wins."),
+                _ => {}
+            },
+            Some(Move::Dominate) => match turn {
+                Turn::Black => println!("Black has dominated the board.\nBlack wins."),
+                Turn::White => println!("White has dominated the board.\nWhite wins."),
                 _ => {}
             },
             _ => {}

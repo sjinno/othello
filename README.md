@@ -7,4 +7,4 @@
 - [x] Automatically skip one's turn when there are no available moves.
 - [ ] Show score at the end of game.
 - [x] Message when player passes, resigns, or wins.
-- [ ] Automatically exit game when one has nowhere to play and print message.
+- [x] Automatically exit game when one has nowhere to play and print message.
