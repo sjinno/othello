@@ -188,6 +188,7 @@ macro_rules! check {
         use Direction::*;
         match $dir {
             Up => {
+                println!("up");
                 for row in 3..SIZE {
                     for col in 1..SIZE {
                         if $board.board[row][col] == Cell::Okay {
@@ -210,6 +211,7 @@ macro_rules! check {
                 false
             }
             Down => {
+                println!("down");
                 for row in 1..=6 {
                     for col in 1..SIZE {
                         if $board.board[row][col] == Cell::Okay {
@@ -232,6 +234,7 @@ macro_rules! check {
                 false
             }
             Left => {
+                println!("left");
                 for row in 1..SIZE {
                     for col in 3..SIZE {
                         if $board.board[row][col] == Cell::Okay {
@@ -254,6 +257,7 @@ macro_rules! check {
                 false
             }
             Right => {
+                println!("right");
                 for row in 1..SIZE {
                     for col in 1..=6 {
                         if $board.board[row][col] == Cell::Okay {
@@ -276,12 +280,13 @@ macro_rules! check {
                 false
             }
             UpLeft => {
+                println!("up left");
                 for row in 3..SIZE {
                     for col in 3..SIZE {
                         if $board.board[row][col] == Cell::Okay {
                             if $board.board[row - 1][col - 1] == $opponent {
                                 let mut count = 2;
-                                while row - count != 0 || col - count != 0 {
+                                while row - count != 0 && col - count != 0 {
                                     if $board.board[row - count][col - count] == $opponent {
                                         count += 1;
                                         continue;
@@ -298,12 +303,13 @@ macro_rules! check {
                 false
             }
             UpRight => {
+                println!("up right");
                 for row in 3..SIZE {
                     for col in 1..=6 {
                         if $board.board[row][col] == Cell::Okay {
                             if $board.board[row - 1][col + 1] == $opponent {
                                 let mut count = 2;
-                                while row - count != 0 || col + count != 9 {
+                                while row - count != 0 && col + count != 9 {
                                     if $board.board[row - count][col + count] == $opponent {
                                         count += 1;
                                         continue;
@@ -320,12 +326,13 @@ macro_rules! check {
                 false
             }
             DownLeft => {
+                println!("down left");
                 for row in 1..=6 {
                     for col in 3..SIZE {
                         if $board.board[row][col] == Cell::Okay {
                             if $board.board[row + 1][col - 1] == $opponent {
                                 let mut count = 2;
-                                while row + count != 9 || col - count != 0 {
+                                while row + count != 9 && col - count != 0 {
                                     if $board.board[row + count][col - count] == $opponent {
                                         count += 1;
                                         continue;
@@ -342,12 +349,13 @@ macro_rules! check {
                 false
             }
             DownRight => {
+                println!("down right");
                 for row in 1..=6 {
                     for col in 1..=6 {
                         if $board.board[row][col] == Cell::Okay {
                             if $board.board[row + 1][col + 1] == $opponent {
                                 let mut count = 2;
-                                while row + count != 9 || col + count != 9 {
+                                while row + count != 9 && col + count != 9 {
                                     if $board.board[row + count][col + count] == $opponent {
                                         count += 1;
                                         continue;
