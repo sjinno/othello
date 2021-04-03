@@ -63,6 +63,11 @@ impl Board {
                 Turn::White => println!("White has dominated the board.\nWhite wins."),
                 _ => {}
             },
+            Some(Move::Win(score)) => match turn {
+                Turn::Black => println!("Black wins by {} points.", score),
+                Turn::White => println!("White wins by {} points.", score),
+                Turn::Neither => println!("TIE!!"),
+            },
             _ => {}
         }
         for row in self.board.iter() {

@@ -22,6 +22,7 @@ pub enum Move {
     Resign,
     Undo,
     Dominate,
+    Win(u8),
 }
 
 #[derive(EnumIter)]
@@ -44,6 +45,11 @@ impl Move {
                     board.board[r][c] = Cell::Black;
                     Board::validate_cells(&mut board.board);
 
+                    let res = Self::check_end_game(board);
+                    if res.0 {
+                        return (res.1, Some(Move::Win(res.2)));
+                    }
+
                     if Self::check_automatic_win(board, Cell::White) {
                         return (Turn::Black, Some(Move::Dominate));
                     }
@@ -58,6 +64,11 @@ impl Move {
                 Turn::White => {
                     board.board[r][c] = Cell::White;
                     Board::validate_cells(&mut board.board);
+
+                    let res = Self::check_end_game(board);
+                    if res.0 {
+                        return (res.1, Some(Move::Win(res.2)));
+                    }
 
                     if Self::check_automatic_win(board, Cell::Black) {
                         return (Turn::White, Some(Move::Dominate));
@@ -334,6 +345,7 @@ impl InputHandler for Move {
 
 trait PlayabilityChecker {
     fn check_playablity(board: &Board, turn: Turn) -> bool;
+    fn check_end_game(board: &Board) -> (bool, Turn, u8);
     fn check_automatic_win(board: &Board, opponent_color: Cell) -> bool;
 }
 
@@ -344,6 +356,15 @@ impl PlayabilityChecker for Move {
             Turn::White => Direction::iter().any(|d| check!(board, Cell::Black, Cell::White, d)),
             _ => false,
         }
+    }
+
+    fn check_end_game(board: &Board) -> (bool, Turn, u8) {
+        if !Self::check_playablity(board, Turn::Black)
+            && !Self::check_playablity(board, Turn::White)
+        {
+            check!(board)
+        }
+        (false, Turn::Neither, 0)
     }
 
     fn check_automatic_win(board: &Board, opponent_color: Cell) -> bool {

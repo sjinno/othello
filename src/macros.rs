@@ -371,6 +371,27 @@ macro_rules! check {
         }
         true
     }};
+
+    ( $board:expr ) => {{
+        use crate::board::SIZE;
+
+        let mut black_count = 0;
+        for row in 1..SIZE {
+            for col in 1..SIZE {
+                if $board.board[row][col] == Cell::Black {
+                    black_count += 1;
+                }
+            }
+        }
+
+        if black_count > 32 {
+            return (true, Turn::Black, black_count);
+        } else if black_count < 32 {
+            return (true, Turn::White, black_count);
+        } else {
+            return (true, Turn::Neither, black_count);
+        }
+    }};
 }
 
 #[macro_export]
