@@ -165,7 +165,7 @@ impl InputHandler for Move {
     }
 
     fn get_row_input() -> usize {
-        print!("Which row? (Enter `u` to undo the column input.)");
+        print!("Which row? (Enter `u` to undo the column input.) ");
         io::stdout().flush().unwrap();
 
         let mut row = String::new();
@@ -247,7 +247,7 @@ impl InputHandler for Move {
 
     fn try_flipping_up_left(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool {
         match (row, col) {
-            (1..=2, 1..=2) => false,
+            (1..=2, _) | (_, 1..=2) => false,
             _ => match turn {
                 Turn::Black => flip!(board, Cell::Black, Cell::White, Direction::UpLeft, row, col),
                 Turn::White => flip!(board, Cell::White, Cell::Black, Direction::UpLeft, row, col),
@@ -258,7 +258,7 @@ impl InputHandler for Move {
 
     fn try_flipping_up_right(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool {
         match (row, col) {
-            (1..=2, 7..=8) => false,
+            (1..=2, _) | (_, 7..=8) => false,
             _ => match turn {
                 Turn::Black => flip!(
                     board,
@@ -283,7 +283,7 @@ impl InputHandler for Move {
 
     fn try_flipping_down_left(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool {
         match (row, col) {
-            (7..=8, 1..=2) => false,
+            (7..=8, _) | (_, 1..=2) => false,
             _ => match turn {
                 Turn::Black => flip!(
                     board,
@@ -308,7 +308,7 @@ impl InputHandler for Move {
 
     fn try_flipping_down_right(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool {
         match (row, col) {
-            (7..=8, 7..=8) => false,
+            (7..=8, _) | (_, 7..=8) => false,
             _ => match turn {
                 Turn::Black => flip!(
                     board,
