@@ -45,14 +45,14 @@ impl Move {
                     Board::validate_cells(&mut board.board);
 
                     if Self::check_automatic_win(board, Cell::White) {
-                        (Turn::Black, Some(Move::Dominate))
+                        return (Turn::Black, Some(Move::Dominate));
+                    }
+
+                    if Self::check_playablity(board, turn) {
+                        board.board[0][0] = Cell::Indicator(Turn::White);
+                        (Turn::White, None)
                     } else {
-                        if Self::check_playablity(board, turn) {
-                            board.board[0][0] = Cell::Indicator(Turn::White);
-                            (Turn::White, None)
-                        } else {
-                            (Turn::Black, None)
-                        }
+                        (Turn::Black, None)
                     }
                 }
                 Turn::White => {
@@ -60,14 +60,14 @@ impl Move {
                     Board::validate_cells(&mut board.board);
 
                     if Self::check_automatic_win(board, Cell::Black) {
-                        (Turn::White, Some(Move::Dominate))
+                        return (Turn::White, Some(Move::Dominate));
+                    }
+
+                    if Self::check_playablity(board, turn) {
+                        board.board[0][0] = Cell::Indicator(Turn::Black);
+                        (Turn::Black, None)
                     } else {
-                        if Self::check_playablity(board, turn) {
-                            board.board[0][0] = Cell::Indicator(Turn::Black);
-                            (Turn::Black, None)
-                        } else {
-                            (Turn::White, None)
-                        }
+                        (Turn::White, None)
                     }
                 }
                 // Automatically set `turn` to `Neither`
