@@ -188,7 +188,6 @@ macro_rules! check {
         use Direction::*;
         match $dir {
             Up => {
-                println!("up");
                 for row in 3..SIZE {
                     for col in 1..SIZE {
                         if $board.board[row][col] == Cell::Okay {
@@ -211,7 +210,6 @@ macro_rules! check {
                 false
             }
             Down => {
-                println!("down");
                 for row in 1..=6 {
                     for col in 1..SIZE {
                         if $board.board[row][col] == Cell::Okay {
@@ -234,7 +232,6 @@ macro_rules! check {
                 false
             }
             Left => {
-                println!("left");
                 for row in 1..SIZE {
                     for col in 3..SIZE {
                         if $board.board[row][col] == Cell::Okay {
@@ -257,7 +254,6 @@ macro_rules! check {
                 false
             }
             Right => {
-                println!("right");
                 for row in 1..SIZE {
                     for col in 1..=6 {
                         if $board.board[row][col] == Cell::Okay {
@@ -280,7 +276,6 @@ macro_rules! check {
                 false
             }
             UpLeft => {
-                println!("up left");
                 for row in 3..SIZE {
                     for col in 3..SIZE {
                         if $board.board[row][col] == Cell::Okay {
@@ -303,7 +298,6 @@ macro_rules! check {
                 false
             }
             UpRight => {
-                println!("up right");
                 for row in 3..SIZE {
                     for col in 1..=6 {
                         if $board.board[row][col] == Cell::Okay {
@@ -326,7 +320,6 @@ macro_rules! check {
                 false
             }
             DownLeft => {
-                println!("down left");
                 for row in 1..=6 {
                     for col in 3..SIZE {
                         if $board.board[row][col] == Cell::Okay {
@@ -349,7 +342,6 @@ macro_rules! check {
                 false
             }
             DownRight => {
-                println!("down right");
                 for row in 1..=6 {
                     for col in 1..=6 {
                         if $board.board[row][col] == Cell::Okay {

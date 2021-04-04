@@ -64,6 +64,8 @@ impl Move {
                         board.board[0][0] = Cell::Indicator(Turn::White);
                         (Turn::White, None)
                     } else {
+                        println!("Couln't find available moves for White. Skipping it's turn...");
+                        sleep(Duration::new(2, 0));
                         (Turn::Black, None)
                     }
                 }
@@ -84,6 +86,8 @@ impl Move {
                         board.board[0][0] = Cell::Indicator(Turn::Black);
                         (Turn::Black, None)
                     } else {
+                        println!("Couln't find available moves for Black. Skipping it's turn...");
+                        sleep(Duration::new(2, 0));
                         (Turn::White, None)
                     }
                 }
@@ -99,7 +103,7 @@ impl Move {
                         board.board[0][0] = Cell::Indicator(Turn::White);
                         (Turn::White, Some(Move::Pass))
                     } else {
-                        println!("Can't pass.");
+                        println!("Cannot pass.");
                         sleep(Duration::new(1, 0));
                         (Turn::Black, Some(Move::Pass))
                     }
@@ -109,7 +113,7 @@ impl Move {
                         board.board[0][0] = Cell::Indicator(Turn::Black);
                         (Turn::Black, Some(Move::Pass))
                     } else {
-                        println!("Can't pass.");
+                        println!("Cannot pass.");
                         sleep(Duration::new(1, 0));
                         (Turn::White, Some(Move::Pass))
                     }

@@ -20,7 +20,7 @@ impl fmt::Display for Cell {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Cell::Black => write!(f, "{}", "● ".black().on_green()),
-            Cell::White => write!(f, "{}", "○ ".black().on_green()),
+            Cell::White => write!(f, "{}", "● ".on_green()),
             Cell::Okay => write!(f, "{}", "・".on_green()),
             Cell::Illegal => write!(f, "{}", "・".on_green()),
             Cell::Label(c) => write!(f, "{} ", *c),
