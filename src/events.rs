@@ -50,12 +50,6 @@ impl Move {
                         return (res.1, Some(Move::Win(res.2, res.3)));
                     }
 
-                    // Automatic win happens when one player dominates
-                    // the entire board.
-                    if Self::check_automatic_win(board, Cell::White) {
-                        return (Turn::Black, Some(Move::Dominate));
-                    }
-
                     // Checks if the other player has available cells
                     // that they can play.
                     //
@@ -76,10 +70,6 @@ impl Move {
                     let res = Self::check_end_game(board);
                     if res.0 {
                         return (res.1, Some(Move::Win(res.2, res.3)));
-                    }
-
-                    if Self::check_automatic_win(board, Cell::Black) {
-                        return (Turn::White, Some(Move::Dominate));
                     }
 
                     if Self::check_playablity(board, turn) {
@@ -133,8 +123,9 @@ impl Move {
 
 trait InputHandler {
     fn get_move(board: &mut Board, turn: Turn) -> Move;
-    fn get_col_input() -> usize;
-    fn get_row_input() -> usize;
+    fn get_input() -> Move;
+    // fn get_col_input() -> usize;
+    // fn get_row_input() -> usize;
     fn is_valid_move(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool;
     fn flip_discs(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool;
     fn try_flipping_up(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool;
@@ -149,58 +140,49 @@ trait InputHandler {
 
 impl InputHandler for Move {
     fn get_move(board: &mut Board, turn: Turn) -> Move {
-        match Self::get_col_input() {
-            0 => Move::Pass,
-            9 => Move::Resign,
-            col => match Self::get_row_input() {
-                42 => Move::Undo,
-                row => {
-                    if Self::is_valid_move(board, turn, row, col) {
-                        Move::Play(row, col)
-                    } else {
-                        Self::get_move(board, turn)
-                    }
+        match Self::get_input() {
+            Move::Play(row, col) => {
+                if Self::is_valid_move(board, turn, row, col) {
+                    Move::Play(row, col)
+                } else {
+                    Self::get_move(board, turn)
                 }
-            },
+            }
+            mv => mv,
         }
     }
 
-    fn get_col_input() -> usize {
-        print!("Which column? (Enter `p` to pass or `r` to resign.) ");
-        io::stdout().flush().unwrap();
+    fn get_input() -> Move {
+        println!("Enter your move. (e.g. 3d)");
+        println!("Enter `p` to pass or `r` to resign.");
 
-        let mut col = String::new();
+        let mut input = String::new();
         io::stdin()
-            .read_line(&mut col)
+            .read_line(&mut input)
             .expect("failed to read line");
 
-        let col = col.trim();
-        match col {
-            c if c.eq_ignore_ascii_case("p") => option!(pass),
-            c if c.eq_ignore_ascii_case("r") => option!(resign),
-            c => match c.parse() {
-                Ok(num) if (1..=8).contains(&num) => num,
-                _ => Self::get_col_input(),
+        let input = input
+            .chars()
+            .filter(|c| c.is_ascii_alphanumeric())
+            .collect::<Vec<_>>();
+        match input.len() {
+            1 => match input[0] {
+                'p' => Move::Pass,
+                'r' => Move::Resign,
+                _ => Self::get_input(),
             },
-        }
-    }
-
-    fn get_row_input() -> usize {
-        print!("Which row? (Enter `u` to undo the column input.) ");
-        io::stdout().flush().unwrap();
-
-        let mut row = String::new();
-        io::stdin()
-            .read_line(&mut row)
-            .expect("failed to read line");
-
-        let row = row.trim();
-        match row {
-            r if r.eq_ignore_ascii_case("u") => option!(undo),
-            r => match r.parse() {
-                Ok(num) if (1..=8).contains(&num) => num,
-                _ => Self::get_row_input(),
+            2 => match input[0] {
+                c if ('1'..='8').contains(&c) => match input[1].to_ascii_lowercase() {
+                    r if ('a'..='h').contains(&r) => {
+                        let row = r.to_digit(18).unwrap() as usize - 9;
+                        let col = c.to_digit(10).unwrap() as usize;
+                        Move::Play(row, col)
+                    }
+                    _ => Self::get_input(),
+                },
+                _ => Self::get_input(),
             },
+            _ => Self::get_input(),
         }
     }
 
