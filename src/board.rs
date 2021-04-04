@@ -58,11 +58,6 @@ impl Board {
                 Turn::White => println!("White has resigned.\nBlack wins."),
                 _ => {}
             },
-            Some(Move::Dominate) => match turn {
-                Turn::Black => println!("Black has dominated the board.\nBlack wins."),
-                Turn::White => println!("White has dominated the board.\nWhite wins."),
-                _ => {}
-            },
             Some(Move::Win(b, w)) => match turn {
                 Turn::Black => println!("Black wins by {} points.", b - w),
                 Turn::White => println!("White wins by {} points.", w - b),

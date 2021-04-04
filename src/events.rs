@@ -1,4 +1,4 @@
-use std::io::{self, Write};
+use std::io;
 use std::thread::sleep;
 use std::time::Duration;
 
@@ -6,7 +6,7 @@ use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
 use crate::board::{Board, Cell};
-use crate::{check, flip, option};
+use crate::{check, flip};
 
 #[derive(Clone, Copy, PartialEq)]
 pub enum Turn {
@@ -20,8 +20,6 @@ pub enum Move {
     Play(usize, usize),
     Pass,
     Resign,
-    Undo,
-    Dominate,
     Win(u8, u8),
 }
 
@@ -115,7 +113,6 @@ impl Move {
                 Turn::White => (Turn::White, Some(Move::Resign)),
                 _ => (Turn::Neither, None),
             },
-            Move::Undo => Self::handle_move(board, turn),
             _ => (Turn::Neither, None),
         }
     }
@@ -124,8 +121,6 @@ impl Move {
 trait InputHandler {
     fn get_move(board: &mut Board, turn: Turn) -> Move;
     fn get_input() -> Move;
-    // fn get_col_input() -> usize;
-    // fn get_row_input() -> usize;
     fn is_valid_move(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool;
     fn flip_discs(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool;
     fn try_flipping_up(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool;
@@ -153,7 +148,7 @@ impl InputHandler for Move {
     }
 
     fn get_input() -> Move {
-        println!("Enter your move. (e.g. 3d)");
+        println!("Enter your move. (Example: 3d)");
         println!("Enter `p` to pass or `r` to resign.");
 
         let mut input = String::new();
