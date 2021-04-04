@@ -179,8 +179,7 @@ macro_rules! flip {
 
 // This macro handles several cases where:
 //   1. If cells are available for whichever player to play.
-//   2. If the board is completely dominated by one player.
-//   3. Calculate scores when a game ends.
+//   2. Calculate scores when a game ends (automatically).
 #[macro_export]
 macro_rules! check {
     ( $board:expr, $you:expr, $opponent:expr, $dir:expr ) => {{
@@ -400,20 +399,5 @@ macro_rules! check {
         } else {
             return (true, Turn::Neither, black_count, white_count);
         }
-    }};
-}
-
-#[macro_export]
-macro_rules! option {
-    (pass) => {{
-        0
-    }};
-
-    (resign) => {{
-        9
-    }};
-
-    (undo) => {{
-        42
     }};
 }
