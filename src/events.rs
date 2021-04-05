@@ -130,6 +130,10 @@ impl InputHandler for Move {
     fn get_move(board: &mut Board, turn: Turn) -> Move {
         match Self::get_input() {
             Move::Play(row, col) => {
+                // This is where flipping discs happens if and only if
+                // there are flippable dics, and returns `Move::Play(_, _)`.
+                //
+                // Otherwise, prompt the player to input `row` and `col` again.
                 if Self::is_valid_move(board, turn, row, col) {
                     Move::Play(row, col)
                 } else {
