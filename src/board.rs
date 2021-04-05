@@ -22,6 +22,9 @@ pub enum Cell {
 impl fmt::Display for Cell {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            // Feel free to change colors.
+            // Color reference can be found at:
+            // https://docs.rs/colored/2.0.0/colored/
             Cell::Black => write!(f, "{}", "● ".black().on_green()),
             Cell::White => write!(f, "{}", "● ".on_green()),
             Cell::Okay => write!(f, "{}", "・".on_green()),
