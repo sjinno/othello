@@ -58,27 +58,33 @@ impl Board {
         }
         match mv {
             Some(Move::Pass) => match turn {
-                Turn::Black => println!("White passed."),
-                Turn::White => println!("Black passed."),
+                Turn::Black => println!("{}", "White passed.".yellow()),
+                Turn::White => println!("{}", "Black passed.".yellow()),
                 _ => {}
             },
             Some(Move::Skip) => match turn {
                 Turn::Black => {
-                    println!("Couln't find available moves for White.\nSkipping it's turn...")
+                    println!(
+                        "{}",
+                        "Couln't find available moves for White.\nSkipping it's turn...".yellow()
+                    )
                 }
                 Turn::White => {
-                    println!("Couln't find available moves for Black.\nSkipping it's turn...")
+                    println!(
+                        "{}",
+                        "Couln't find available moves for Black.\nSkipping it's turn...".yellow()
+                    )
                 }
                 _ => {}
             },
             Some(Move::Resign) => match turn {
-                Turn::Black => println!("Black has resigned.\nWhite wins."),
-                Turn::White => println!("White has resigned.\nBlack wins."),
+                Turn::Black => println!("{}", "Black has resigned.\nWhite wins.".purple()),
+                Turn::White => println!("{}", "White has resigned.\nBlack wins.".purple()),
                 _ => {}
             },
             Some(Move::Win(b, w)) => match turn {
-                Turn::Black => println!("Black wins by {} points.", b - w),
-                Turn::White => println!("White wins by {} points.", w - b),
+                Turn::Black => println!("{}", format!("Black wins by {} points.", b - w).purple()),
+                Turn::White => println!("{}", format!("White wins by {} points.", w - b).purple()),
                 Turn::Neither => println!("TIE!!"),
             },
             _ => {}
