@@ -76,10 +76,6 @@ impl Move {
                         (Turn::White, Some(Move::Skip))
                     }
                 }
-                // Automatically set `turn` to `Neither`
-                // when there are no empty spaces.
-                //
-                // Or when each player passes their turn consecutively.
                 _ => (Turn::Neither, None),
             },
             Move::Pass => match turn {
@@ -157,6 +153,7 @@ impl InputHandler for Move {
             .chars()
             .filter(|c| c.is_ascii_alphanumeric())
             .collect::<Vec<_>>();
+
         match input.len() {
             1 => match input[0] {
                 'p' => Move::Pass,
@@ -330,7 +327,6 @@ impl InputHandler for Move {
 trait PlayabilityChecker {
     fn check_playablity(board: &Board, turn: Turn) -> bool;
     fn check_end_game(board: &Board) -> (bool, Turn, u8, u8);
-    fn check_automatic_win(board: &Board, opponent_color: Cell) -> bool;
 }
 
 impl PlayabilityChecker for Move {
@@ -349,9 +345,5 @@ impl PlayabilityChecker for Move {
             check!(board)
         }
         (false, Turn::Neither, 0, 0)
-    }
-
-    fn check_automatic_win(board: &Board, opponent_color: Cell) -> bool {
-        check!(board, opponent_color)
     }
 }

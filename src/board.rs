@@ -16,6 +16,9 @@ pub enum Cell {
     Indicator(Turn),
 }
 
+// Might not work well if you have light themed terminal.
+// If that's the case, feel free to modify colors.
+// Or you can maybe simply apply dark theme. :)
 impl fmt::Display for Cell {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
@@ -55,10 +58,10 @@ impl Board {
             },
             Some(Move::Skip) => match turn {
                 Turn::Black => {
-                    println!("Couln't find available moves for White. Skipping it's turn...")
+                    println!("Couln't find available moves for White.\nSkipping it's turn...")
                 }
                 Turn::White => {
-                    println!("Couln't find available moves for Black. Skipping it's turn...")
+                    println!("Couln't find available moves for Black.\nSkipping it's turn...")
                 }
                 _ => {}
             },
@@ -99,7 +102,7 @@ impl Board {
         //# Labeling ends.
     }
 
-    // This function validates whether or not empty cells are playable.
+    // This function validates whether or not empty cells are okay to be played.
     pub fn validate_cells(board: &mut Vec<Vec<Cell>>) {
         for row in 1..SIZE {
             for col in 1..SIZE {

@@ -365,18 +365,6 @@ macro_rules! check {
         }
     }};
 
-    ( $board:expr, $opponent_color:expr ) => {{
-        use crate::board::SIZE;
-        for row in 1..SIZE {
-            for col in 1..SIZE {
-                if $board.board[row][col] == $opponent_color {
-                    return false;
-                }
-            }
-        }
-        true
-    }};
-
     ( $board:expr ) => {{
         use crate::board::SIZE;
 

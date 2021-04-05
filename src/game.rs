@@ -34,7 +34,7 @@ impl Game {
                     break;
                 }
             }
-            // When either of `Resign, Dominate, Win` happens, game ends.
+            // When either `Resign or Win` happens, game ends.
             if let Some(Move::Resign) | Some(Move::Win(_, _)) = mv {
                 turn = Turn::Neither
             }
