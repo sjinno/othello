@@ -53,6 +53,15 @@ impl Board {
                 Turn::White => println!("Black passed."),
                 _ => {}
             },
+            Some(Move::Skip) => match turn {
+                Turn::Black => {
+                    println!("Couln't find available moves for White. Skipping it's turn...")
+                }
+                Turn::White => {
+                    println!("Couln't find available moves for Black. Skipping it's turn...")
+                }
+                _ => {}
+            },
             Some(Move::Resign) => match turn {
                 Turn::Black => println!("Black has resigned.\nWhite wins."),
                 Turn::White => println!("White has resigned.\nBlack wins."),
@@ -83,7 +92,6 @@ impl Board {
         //# Labeling:
         for (i, c) in ('1'..='8').enumerate() {
             board[0][i + 1] = Cell::Label(c);
-            // board[i + 1][0] = Cell::Label(c);
         }
         for (i, c) in ('A'..='H').enumerate() {
             board[i + 1][0] = Cell::Label(c);

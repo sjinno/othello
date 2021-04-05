@@ -19,6 +19,7 @@ pub enum Turn {
 pub enum Move {
     Play(usize, usize),
     Pass,
+    Skip,
     Resign,
     Win(u8, u8),
 }
@@ -56,9 +57,7 @@ impl Move {
                         board.board[0][0] = Cell::Indicator(Turn::White);
                         (Turn::White, None)
                     } else {
-                        println!("Couln't find available moves for White. Skipping it's turn...");
-                        sleep(Duration::new(2, 0));
-                        (Turn::Black, None)
+                        (Turn::Black, Some(Move::Skip))
                     }
                 }
                 Turn::White => {
@@ -74,9 +73,7 @@ impl Move {
                         board.board[0][0] = Cell::Indicator(Turn::Black);
                         (Turn::Black, None)
                     } else {
-                        println!("Couln't find available moves for Black. Skipping it's turn...");
-                        sleep(Duration::new(2, 0));
-                        (Turn::White, None)
+                        (Turn::White, Some(Move::Skip))
                     }
                 }
                 // Automatically set `turn` to `Neither`
@@ -92,7 +89,7 @@ impl Move {
                         (Turn::White, Some(Move::Pass))
                     } else {
                         println!("Cannot pass.");
-                        sleep(Duration::new(1, 0));
+                        sleep(Duration::from_secs_f32(1.5));
                         (Turn::Black, Some(Move::Pass))
                     }
                 }
@@ -102,7 +99,7 @@ impl Move {
                         (Turn::Black, Some(Move::Pass))
                     } else {
                         println!("Cannot pass.");
-                        sleep(Duration::new(1, 0));
+                        sleep(Duration::from_secs_f32(1.5));
                         (Turn::White, Some(Move::Pass))
                     }
                 }
