@@ -50,6 +50,12 @@ impl Board {
 
     pub fn draw(&self, turn: Turn, mv: Option<Move>) {
         print!("\x1B[2J\x1B[1;1H");
+        for row in self.board.iter() {
+            for col in row {
+                print!("{}", col);
+            }
+            println!();
+        }
         match mv {
             Some(Move::Pass) => match turn {
                 Turn::Black => println!("White passed."),
@@ -76,12 +82,6 @@ impl Board {
                 Turn::Neither => println!("TIE!!"),
             },
             _ => {}
-        }
-        for row in self.board.iter() {
-            for col in row {
-                print!("{}", col);
-            }
-            println!();
         }
     }
 
