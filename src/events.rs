@@ -90,7 +90,7 @@ impl Move {
                     } else {
                         println!("Cannot pass.");
                         sleep(Duration::from_secs_f32(1.5));
-                        (Turn::Black, Some(Move::Pass))
+                        (Turn::Black, None)
                     }
                 }
                 Turn::White => {
@@ -100,7 +100,7 @@ impl Move {
                     } else {
                         println!("Cannot pass.");
                         sleep(Duration::from_secs_f32(1.5));
-                        (Turn::White, Some(Move::Pass))
+                        (Turn::White, None)
                     }
                 }
                 _ => (Turn::Neither, None),
