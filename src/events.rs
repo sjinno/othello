@@ -137,6 +137,7 @@ impl InputHandler for Move {
                 if Self::is_valid_move(board, turn, row, col) {
                     Move::Play(row, col)
                 } else {
+                    println!("Invalid move. Please try again.");
                     Self::get_move(board, turn)
                 }
             }
