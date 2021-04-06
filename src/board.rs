@@ -86,8 +86,12 @@ impl Board {
                 _ => {}
             },
             Some(Move::Win(b, w)) => match turn {
-                Turn::Black => println!("{}", format!("Black wins by {} points.", b - w).purple()),
-                Turn::White => println!("{}", format!("White wins by {} points.", w - b).purple()),
+                Turn::Black => {
+                    println!("{}", format!("Black wins by {} points.", b - w).purple())
+                }
+                Turn::White => {
+                    println!("{}", format!("White wins by {} points.", w - b).purple())
+                }
                 Turn::Neither => println!("TIE!!"),
             },
             _ => {}
@@ -188,7 +192,7 @@ impl Board {
 
     fn validate(row: usize, col: usize, board: &mut Vec<Vec<Cell>>) {
         if board[row][col] == Cell::Illegal {
-            board[row][col] = Cell::Okay
+            board[row][col] = Cell::Okay;
         }
     }
 }

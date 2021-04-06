@@ -381,11 +381,11 @@ macro_rules! check {
         }
 
         if black_count > white_count {
-            return (true, Turn::Black, black_count, white_count);
+            return (true, Turn::Black, Some(black_count), Some(white_count));
         } else if black_count < white_count {
-            return (true, Turn::White, black_count, white_count);
+            return (true, Turn::White, Some(black_count), Some(white_count));
         } else {
-            return (true, Turn::Neither, black_count, white_count);
+            return (true, Turn::Neither, Some(black_count), Some(white_count));
         }
     }};
 }

@@ -47,7 +47,9 @@ impl Move {
 
                     let res = Self::check_end_game(board);
                     if res.0 {
-                        return (res.1, Some(Move::Win(res.2, res.3)));
+                        if let (Some(b), Some(w)) = (res.2, res.3) {
+                            return (res.1, Some(Move::Win(b, w)));
+                        }
                     }
 
                     // Checks if the other player has available cells
@@ -67,7 +69,9 @@ impl Move {
 
                     let res = Self::check_end_game(board);
                     if res.0 {
-                        return (res.1, Some(Move::Win(res.2, res.3)));
+                        if let (Some(b), Some(w)) = (res.2, res.3) {
+                            return (res.1, Some(Move::Win(b, w)));
+                        }
                     }
 
                     if Self::check_playablity(board, turn) {
@@ -332,7 +336,7 @@ impl InputHandler for Move {
 
 trait PlayabilityChecker {
     fn check_playablity(board: &Board, turn: Turn) -> bool;
-    fn check_end_game(board: &Board) -> (bool, Turn, u8, u8);
+    fn check_end_game(board: &Board) -> (bool, Turn, Option<u8>, Option<u8>);
 }
 
 impl PlayabilityChecker for Move {
@@ -344,12 +348,12 @@ impl PlayabilityChecker for Move {
         }
     }
 
-    fn check_end_game(board: &Board) -> (bool, Turn, u8, u8) {
+    fn check_end_game(board: &Board) -> (bool, Turn, Option<u8>, Option<u8>) {
         if !Self::check_playablity(board, Turn::Black)
             && !Self::check_playablity(board, Turn::White)
         {
             check!(board)
         }
-        (false, Turn::Neither, 0, 0)
+        (false, Turn::Neither, None, None)
     }
 }
