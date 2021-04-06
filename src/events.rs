@@ -2,6 +2,7 @@ use std::io;
 use std::thread::sleep;
 use std::time::Duration;
 
+use colored::Colorize;
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
@@ -84,7 +85,7 @@ impl Move {
                         board.board[0][0] = Cell::Indicator(Turn::White);
                         (Turn::White, Some(Move::Pass))
                     } else {
-                        println!("Cannot pass.");
+                        println!("{}", "Cannot pass.".red());
                         sleep(Duration::from_secs_f32(1.5));
                         (Turn::Black, None)
                     }
@@ -94,7 +95,7 @@ impl Move {
                         board.board[0][0] = Cell::Indicator(Turn::Black);
                         (Turn::Black, Some(Move::Pass))
                     } else {
-                        println!("Cannot pass.");
+                        println!("{}", "Cannot pass.".red());
                         sleep(Duration::from_secs_f32(1.5));
                         (Turn::White, None)
                     }
@@ -137,7 +138,7 @@ impl InputHandler for Move {
                 if Self::is_valid_move(board, turn, row, col) {
                     Move::Play(row, col)
                 } else {
-                    println!("Invalid move. Please try again.");
+                    println!("{}", "Invalid move. Please try again.".red());
                     Self::get_move(board, turn)
                 }
             }
