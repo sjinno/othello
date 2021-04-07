@@ -10,3 +10,6 @@ version = "0.1.0"
 colored = "2.0.0"
 strum = "0.20.0"
 strum_macros = "0.20"
+
+[profile.release]
+debug = true
