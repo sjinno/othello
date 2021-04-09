@@ -195,4 +195,26 @@ impl Board {
             board[row][col] = Cell::Okay;
         }
     }
+
+    pub fn count_scores(&self) -> (bool, Turn, Option<u8>, Option<u8>) {
+        let mut black_count = 0;
+        let mut white_count = 0;
+        for row in 1..SIZE {
+            for col in 1..SIZE {
+                if self.board[row][col] == Cell::Black {
+                    black_count += 1;
+                } else if self.board[row][col] == Cell::White {
+                    white_count += 1;
+                }
+            }
+        }
+
+        if black_count > white_count {
+            (true, Turn::Black, Some(black_count), Some(white_count))
+        } else if black_count < white_count {
+            (true, Turn::White, Some(black_count), Some(white_count))
+        } else {
+            (true, Turn::Neither, Some(black_count), Some(white_count))
+        }
+    }
 }

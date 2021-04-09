@@ -352,7 +352,7 @@ impl PlayabilityChecker for Move {
         if !Self::check_playablity(board, Turn::Black)
             && !Self::check_playablity(board, Turn::White)
         {
-            check!(board)
+            return board.count_scores();
         }
         (false, Turn::Neither, None, None)
     }

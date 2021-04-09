@@ -364,28 +364,4 @@ macro_rules! check {
             }
         }
     }};
-
-    ( $board:expr ) => {{
-        use crate::board::SIZE;
-
-        let mut black_count = 0;
-        let mut white_count = 0;
-        for row in 1..SIZE {
-            for col in 1..SIZE {
-                if $board.board[row][col] == Cell::Black {
-                    black_count += 1;
-                } else if $board.board[row][col] == Cell::White {
-                    white_count += 1;
-                }
-            }
-        }
-
-        if black_count > white_count {
-            return (true, Turn::Black, Some(black_count), Some(white_count));
-        } else if black_count < white_count {
-            return (true, Turn::White, Some(black_count), Some(white_count));
-        } else {
-            return (true, Turn::Neither, Some(black_count), Some(white_count));
-        }
-    }};
 }
