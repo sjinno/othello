@@ -42,8 +42,8 @@ impl Move {
         match Self::get_move(board, turn) {
             Move::Play(r, c) => match turn {
                 Turn::Black => {
-                    board.board[r][c] = Cell::Black;
-                    Board::validate_cells(&mut board.board);
+                    board.cells[r][c] = Cell::Black;
+                    board.validate_cells();
 
                     let res = Self::check_end_game(board);
                     if res.0 {
@@ -57,15 +57,15 @@ impl Move {
                     //
                     // If not, you will be automatically given a turn again.
                     if Self::check_playablity(board, turn) {
-                        board.board[0][0] = Cell::Indicator(Turn::White);
+                        board.cells[0][0] = Cell::Indicator(Turn::White);
                         (Turn::White, None)
                     } else {
                         (Turn::Black, Some(Move::Skip))
                     }
                 }
                 Turn::White => {
-                    board.board[r][c] = Cell::White;
-                    Board::validate_cells(&mut board.board);
+                    board.cells[r][c] = Cell::White;
+                    board.validate_cells();
 
                     let res = Self::check_end_game(board);
                     if res.0 {
@@ -75,7 +75,7 @@ impl Move {
                     }
 
                     if Self::check_playablity(board, turn) {
-                        board.board[0][0] = Cell::Indicator(Turn::Black);
+                        board.cells[0][0] = Cell::Indicator(Turn::Black);
                         (Turn::Black, None)
                     } else {
                         (Turn::White, Some(Move::Skip))
@@ -86,7 +86,7 @@ impl Move {
             Move::Pass => match turn {
                 Turn::Black => {
                     if Self::check_playablity(board, turn) {
-                        board.board[0][0] = Cell::Indicator(Turn::White);
+                        board.cells[0][0] = Cell::Indicator(Turn::White);
                         (Turn::White, Some(Move::Pass))
                     } else {
                         println!("{}", "Cannot pass.".red());
@@ -96,7 +96,7 @@ impl Move {
                 }
                 Turn::White => {
                     if Self::check_playablity(board, turn) {
-                        board.board[0][0] = Cell::Indicator(Turn::Black);
+                        board.cells[0][0] = Cell::Indicator(Turn::Black);
                         (Turn::Black, Some(Move::Pass))
                     } else {
                         println!("{}", "Cannot pass.".red());
@@ -186,7 +186,7 @@ impl InputHandler for Move {
     }
 
     fn is_valid_move(board: &mut Board, turn: Turn, row: usize, col: usize) -> bool {
-        match board.board[row][col] {
+        match board.cells[row][col] {
             Cell::Okay => Self::flip_discs(board, turn, row, col),
             _ => false,
         }

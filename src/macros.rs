@@ -6,15 +6,15 @@ macro_rules! flip {
         use Direction::*;
         match $dir {
             Up => {
-                if $board.board[$row - 1][$col] == $opponent {
+                if $board.cells[$row - 1][$col] == $opponent {
                     let mut count = 2;
                     while $row - count > 0 {
-                        if $board.board[$row - count][$col] == $opponent {
+                        if $board.cells[$row - count][$col] == $opponent {
                             count += 1;
                             continue;
-                        } else if $board.board[$row - count][$col] == $you {
+                        } else if $board.cells[$row - count][$col] == $you {
                             (1..count).for_each(|r| {
-                                $board.board[$row - r][$col] = $you;
+                                $board.cells[$row - r][$col] = $you;
                             });
                             return true;
                         } else {
@@ -27,15 +27,15 @@ macro_rules! flip {
                 }
             }
             Down => {
-                if $board.board[$row + 1][$col] == $opponent {
+                if $board.cells[$row + 1][$col] == $opponent {
                     let mut count = 2;
                     while $row + count != 9 {
-                        if $board.board[$row + count][$col] == $opponent {
+                        if $board.cells[$row + count][$col] == $opponent {
                             count += 1;
                             continue;
-                        } else if $board.board[$row + count][$col] == $you {
+                        } else if $board.cells[$row + count][$col] == $you {
                             (1..count).for_each(|r| {
-                                $board.board[$row + r][$col] = $you;
+                                $board.cells[$row + r][$col] = $you;
                             });
                             return true;
                         } else {
@@ -48,15 +48,15 @@ macro_rules! flip {
                 }
             }
             Left => {
-                if $board.board[$row][$col - 1] == $opponent {
+                if $board.cells[$row][$col - 1] == $opponent {
                     let mut count = 2;
                     while $col - count != 0 {
-                        if $board.board[$row][$col - count] == $opponent {
+                        if $board.cells[$row][$col - count] == $opponent {
                             count += 1;
                             continue;
-                        } else if $board.board[$row][$col - count] == $you {
+                        } else if $board.cells[$row][$col - count] == $you {
                             (1..count).for_each(|c| {
-                                $board.board[$row][$col - c] = $you;
+                                $board.cells[$row][$col - c] = $you;
                             });
                             return true;
                         } else {
@@ -69,15 +69,15 @@ macro_rules! flip {
                 }
             }
             Right => {
-                if $board.board[$row][$col + 1] == $opponent {
+                if $board.cells[$row][$col + 1] == $opponent {
                     let mut count = 2;
                     while $col + count != 9 {
-                        if $board.board[$row][$col + count] == $opponent {
+                        if $board.cells[$row][$col + count] == $opponent {
                             count += 1;
                             continue;
-                        } else if $board.board[$row][$col + count] == $you {
+                        } else if $board.cells[$row][$col + count] == $you {
                             (1..count).for_each(|c| {
-                                $board.board[$row][$col + c] = $you;
+                                $board.cells[$row][$col + c] = $you;
                             });
                             return true;
                         } else {
@@ -90,15 +90,15 @@ macro_rules! flip {
                 }
             }
             UpLeft => {
-                if $board.board[$row - 1][$col - 1] == $opponent {
+                if $board.cells[$row - 1][$col - 1] == $opponent {
                     let mut count = 2;
                     while $row - count != 0 && $col - count != 0 {
-                        if $board.board[$row - count][$col - count] == $opponent {
+                        if $board.cells[$row - count][$col - count] == $opponent {
                             count += 1;
                             continue;
-                        } else if $board.board[$row - count][$col - count] == $you {
+                        } else if $board.cells[$row - count][$col - count] == $you {
                             (1..count).for_each(|c| {
-                                $board.board[$row - c][$col - c] = $you;
+                                $board.cells[$row - c][$col - c] = $you;
                             });
                             return true;
                         } else {
@@ -111,15 +111,15 @@ macro_rules! flip {
                 }
             }
             UpRight => {
-                if $board.board[$row - 1][$col + 1] == $opponent {
+                if $board.cells[$row - 1][$col + 1] == $opponent {
                     let mut count = 2;
                     while $row - count != 0 && $col + count != 9 {
-                        if $board.board[$row - count][$col + count] == $opponent {
+                        if $board.cells[$row - count][$col + count] == $opponent {
                             count += 1;
                             continue;
-                        } else if $board.board[$row - count][$col + count] == $you {
+                        } else if $board.cells[$row - count][$col + count] == $you {
                             (1..count).for_each(|c| {
-                                $board.board[$row - c][$col + c] = $you;
+                                $board.cells[$row - c][$col + c] = $you;
                             });
                             return true;
                         } else {
@@ -132,15 +132,15 @@ macro_rules! flip {
                 }
             }
             DownLeft => {
-                if $board.board[$row + 1][$col - 1] == $opponent {
+                if $board.cells[$row + 1][$col - 1] == $opponent {
                     let mut count = 2;
                     while $row + count != 9 && $col - count != 0 {
-                        if $board.board[$row + count][$col - count] == $opponent {
+                        if $board.cells[$row + count][$col - count] == $opponent {
                             count += 1;
                             continue;
-                        } else if $board.board[$row + count][$col - count] == $you {
+                        } else if $board.cells[$row + count][$col - count] == $you {
                             (1..count).for_each(|c| {
-                                $board.board[$row + c][$col - c] = $you;
+                                $board.cells[$row + c][$col - c] = $you;
                             });
                             return true;
                         } else {
@@ -153,15 +153,15 @@ macro_rules! flip {
                 }
             }
             DownRight => {
-                if $board.board[$row + 1][$col + 1] == $opponent {
+                if $board.cells[$row + 1][$col + 1] == $opponent {
                     let mut count = 2;
                     while $row + count != 9 && $col + count != 9 {
-                        if $board.board[$row + count][$col + count] == $opponent {
+                        if $board.cells[$row + count][$col + count] == $opponent {
                             count += 1;
                             continue;
-                        } else if $board.board[$row + count][$col + count] == $you {
+                        } else if $board.cells[$row + count][$col + count] == $you {
                             (1..count).for_each(|c| {
-                                $board.board[$row + c][$col + c] = $you;
+                                $board.cells[$row + c][$col + c] = $you;
                             });
                             return true;
                         } else {
@@ -189,14 +189,14 @@ macro_rules! check {
             Up => {
                 for row in 3..SIZE {
                     for col in 1..SIZE {
-                        if $board.board[row][col] == Cell::Okay {
-                            if $board.board[row - 1][col] == $opponent {
+                        if $board.cells[row][col] == Cell::Okay {
+                            if $board.cells[row - 1][col] == $opponent {
                                 let mut count = 2;
                                 while row - count != 0 {
-                                    if $board.board[row - count][col] == $opponent {
+                                    if $board.cells[row - count][col] == $opponent {
                                         count += 1;
                                         continue;
-                                    } else if $board.board[row - count][col] == $you {
+                                    } else if $board.cells[row - count][col] == $you {
                                         return true;
                                     } else {
                                         break;
@@ -211,14 +211,14 @@ macro_rules! check {
             Down => {
                 for row in 1..=6 {
                     for col in 1..SIZE {
-                        if $board.board[row][col] == Cell::Okay {
-                            if $board.board[row + 1][col] == $opponent {
+                        if $board.cells[row][col] == Cell::Okay {
+                            if $board.cells[row + 1][col] == $opponent {
                                 let mut count = 2;
                                 while row + count != 9 {
-                                    if $board.board[row + count][col] == $opponent {
+                                    if $board.cells[row + count][col] == $opponent {
                                         count += 1;
                                         continue;
-                                    } else if $board.board[row + count][col] == $you {
+                                    } else if $board.cells[row + count][col] == $you {
                                         return true;
                                     } else {
                                         break;
@@ -233,14 +233,14 @@ macro_rules! check {
             Left => {
                 for row in 1..SIZE {
                     for col in 3..SIZE {
-                        if $board.board[row][col] == Cell::Okay {
-                            if $board.board[row][col - 1] == $opponent {
+                        if $board.cells[row][col] == Cell::Okay {
+                            if $board.cells[row][col - 1] == $opponent {
                                 let mut count = 2;
                                 while col - count != 0 {
-                                    if $board.board[row][col - count] == $opponent {
+                                    if $board.cells[row][col - count] == $opponent {
                                         count += 1;
                                         continue;
-                                    } else if $board.board[row][col - count] == $you {
+                                    } else if $board.cells[row][col - count] == $you {
                                         return true;
                                     } else {
                                         break;
@@ -255,14 +255,14 @@ macro_rules! check {
             Right => {
                 for row in 1..SIZE {
                     for col in 1..=6 {
-                        if $board.board[row][col] == Cell::Okay {
-                            if $board.board[row][col + 1] == $opponent {
+                        if $board.cells[row][col] == Cell::Okay {
+                            if $board.cells[row][col + 1] == $opponent {
                                 let mut count = 2;
                                 while col + count != 9 {
-                                    if $board.board[row][col + count] == $opponent {
+                                    if $board.cells[row][col + count] == $opponent {
                                         count += 1;
                                         continue;
-                                    } else if $board.board[row][col + count] == $you {
+                                    } else if $board.cells[row][col + count] == $you {
                                         return true;
                                     } else {
                                         break;
@@ -277,14 +277,14 @@ macro_rules! check {
             UpLeft => {
                 for row in 3..SIZE {
                     for col in 3..SIZE {
-                        if $board.board[row][col] == Cell::Okay {
-                            if $board.board[row - 1][col - 1] == $opponent {
+                        if $board.cells[row][col] == Cell::Okay {
+                            if $board.cells[row - 1][col - 1] == $opponent {
                                 let mut count = 2;
                                 while row - count != 0 && col - count != 0 {
-                                    if $board.board[row - count][col - count] == $opponent {
+                                    if $board.cells[row - count][col - count] == $opponent {
                                         count += 1;
                                         continue;
-                                    } else if $board.board[row - count][col - count] == $you {
+                                    } else if $board.cells[row - count][col - count] == $you {
                                         return true;
                                     } else {
                                         break;
@@ -299,14 +299,14 @@ macro_rules! check {
             UpRight => {
                 for row in 3..SIZE {
                     for col in 1..=6 {
-                        if $board.board[row][col] == Cell::Okay {
-                            if $board.board[row - 1][col + 1] == $opponent {
+                        if $board.cells[row][col] == Cell::Okay {
+                            if $board.cells[row - 1][col + 1] == $opponent {
                                 let mut count = 2;
                                 while row - count != 0 && col + count != 9 {
-                                    if $board.board[row - count][col + count] == $opponent {
+                                    if $board.cells[row - count][col + count] == $opponent {
                                         count += 1;
                                         continue;
-                                    } else if $board.board[row - count][col + count] == $you {
+                                    } else if $board.cells[row - count][col + count] == $you {
                                         return true;
                                     } else {
                                         break;
@@ -321,14 +321,14 @@ macro_rules! check {
             DownLeft => {
                 for row in 1..=6 {
                     for col in 3..SIZE {
-                        if $board.board[row][col] == Cell::Okay {
-                            if $board.board[row + 1][col - 1] == $opponent {
+                        if $board.cells[row][col] == Cell::Okay {
+                            if $board.cells[row + 1][col - 1] == $opponent {
                                 let mut count = 2;
                                 while row + count != 9 && col - count != 0 {
-                                    if $board.board[row + count][col - count] == $opponent {
+                                    if $board.cells[row + count][col - count] == $opponent {
                                         count += 1;
                                         continue;
-                                    } else if $board.board[row + count][col - count] == $you {
+                                    } else if $board.cells[row + count][col - count] == $you {
                                         return true;
                                     } else {
                                         break;
@@ -343,14 +343,14 @@ macro_rules! check {
             DownRight => {
                 for row in 1..=6 {
                     for col in 1..=6 {
-                        if $board.board[row][col] == Cell::Okay {
-                            if $board.board[row + 1][col + 1] == $opponent {
+                        if $board.cells[row][col] == Cell::Okay {
+                            if $board.cells[row + 1][col + 1] == $opponent {
                                 let mut count = 2;
                                 while row + count != 9 && col + count != 9 {
-                                    if $board.board[row + count][col + count] == $opponent {
+                                    if $board.cells[row + count][col + count] == $opponent {
                                         count += 1;
                                         continue;
-                                    } else if $board.board[row + count][col + count] == $you {
+                                    } else if $board.cells[row + count][col + count] == $you {
                                         return true;
                                     } else {
                                         break;
